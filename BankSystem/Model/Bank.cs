@@ -83,9 +83,40 @@ namespace BankSystem.Model
             }
         }
 
-        public void AddClient()
+        public void AddClient<T>(T item)
         {
-            clientsDbContext.AllNaturalClients.
+            if (item is AllNaturalClient)
+            {
+                if (allNaturalClients.Contains(item as AllNaturalClient))
+                {
+                    allNaturalClients.Add(item as AllNaturalClient);
+                    clientsDbContext.SaveChanges();
+                }
+            }
+            else if (item is AllLegalClient)
+            {
+                if (allLegalClients.Contains(item as AllLegalClient))
+                {
+                    allLegalClients.Add(item as AllLegalClient);
+                    clientsDbContext.SaveChanges();
+                }
+            }
+            else if (item is AllVipNaturalClient)
+            {
+                if (allVipNatural.Contains(item as AllVipNaturalClient))
+                {
+                    allVipNatural.Add(item as AllVipNaturalClient);
+                    clientsDbContext.SaveChanges();
+                }
+            }
+            else if (item is AllVipLegalClient)
+            {
+                if (allVipLegal.Contains(item as AllVipLegalClient))
+                {
+                    allVipLegal.Add(item as AllVipLegalClient);
+                    clientsDbContext.SaveChanges();
+                }
+            }
         }
 
     }
