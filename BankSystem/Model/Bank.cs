@@ -85,6 +85,7 @@ namespace BankSystem.Model
 
         public void AddClient<T>(T item)
         {
+            
             if (item is AllNaturalClient)
             {
                 if (allNaturalClients.Contains(item as AllNaturalClient))

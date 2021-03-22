@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:BankSystem"
         mc:Ignorable="d"
         Title="AddClientWindow" Height="450" Width="800">
@@ -11,10 +12,12 @@
             <local:SimpleMultiConverter x:Key="SimpleMultiConverter"/>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="132*"/>
+            <ColumnDefinition Width="136*"/>
+            <ColumnDefinition Width="148*"/>
+            <ColumnDefinition Width="100*"/>
+            <ColumnDefinition Width="136*"/>
             <ColumnDefinition Width="144*"/>
             <ColumnDefinition Width="97*"/>
-            <ColumnDefinition Width="428*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="21*"/>
@@ -26,9 +29,9 @@
             <RowDefinition Height="35*"/>
             <RowDefinition Height="196*"/>
         </Grid.RowDefinitions>
-        <RadioButton x:Name="radioButton" GroupName="NaturalOrLegal" Content="Физ лицо" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="15" Width="88"/>
+        <RadioButton x:Name="radioButton" GroupName="NaturalOrLegal" Content="Физ лицо" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Height="15" Width="88" Margin="4,0,0,0"/>
         <RadioButton x:Name="radioButton1" GroupName="NaturalOrLegal" Content="Юр лицо" Grid.Column="2" HorizontalAlignment="Left" Margin="4,0,0,0" Grid.Row="1" VerticalAlignment="Center" Height="14" Width="69"/>
-        
+
         <TextBox x:Name="firstnameBox"  HorizontalAlignment="Center" Grid.Row="2" 
                   TextWrapping="Wrap" VerticalAlignment="Center" Width="124" Grid.Column="1" Height="21"/>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Center" Grid.Row="2" Text="Имя" TextWrapping="Wrap" VerticalAlignment="Center" Height="21" Width="112"/>
@@ -38,16 +41,39 @@
                  VerticalAlignment="Center" Width="124" Grid.Column="1" Height="21"/>
         <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Center" Grid.Row="3" Text="Фамилия" TextWrapping="Wrap" VerticalAlignment="Center" Height="21" Width="112"/>
 
-        <TextBox x:Name="datebitchBox"
+        <TextBox x:Name="boxBirthday" Text="{Binding Date, Mode=TwoWay}" 
                  HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" 
-                 VerticalAlignment="Top" Width="124" Grid.Column="1" Height="21" Margin="0,10,0,0"/>
-        <TextBlock x:Name="textBlock_Copy1" HorizontalAlignment="Center" Grid.Row="4" Text="Дата рождения" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="112" Margin="0,10,0,0"/>
-
-        <TextBox x:Name="departBox"
-                 HorizontalAlignment="Center" Grid.Row="5"
-                 TextWrapping="Wrap" VerticalAlignment="Center" Width="124" Grid.Column="1" Height="21"/>
+                 VerticalAlignment="Center" Width="124" Grid.Column="1" Height="21">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="LostFocus">
+                    <i:InvokeCommandAction Command="{Binding TextIsDateCommand, Mode=TwoWay }" CommandParameter="{Binding Path=Text, ElementName=txt}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBox>
+        <TextBlock x:Name="textBlock_Copy1" HorizontalAlignment="Center" Grid.Row="4" Text="Дата рождения" TextWrapping="Wrap" VerticalAlignment="Center" Height="21" Width="112"/>
         <TextBlock x:Name="textBlock_Copy2" HorizontalAlignment="Center" Grid.Row="5" Text="Отдел" TextWrapping="Wrap" VerticalAlignment="Center" Height="21" Width="112"/>
-        
+
+        <TextBlock HorizontalAlignment="Left" Grid.Row="2" Text="Название" TextWrapping="Wrap" VerticalAlignment="Center" Height="21" Width="112" Grid.Column="3" Margin="10,0,0,0"/>
+        <TextBox x:Name="boxName" Grid.Column="4" HorizontalAlignment="Center" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Width="131" Height="21"/>
+
+        <TextBox x:Name="boxDateCreate"
+                 HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" 
+                 VerticalAlignment="Center" Width="131" Grid.Column="4" Height="21">
+
+        </TextBox>
+
+        <TextBlock  HorizontalAlignment="Left" Grid.Row="4" Text="Дата создания" TextWrapping="Wrap" VerticalAlignment="Center" Height="21" Width="112" Grid.Column="3" Margin="10,0,0,0"/>
+        <TextBlock  HorizontalAlignment="Left" Grid.Row="5" Text="Отдел" TextWrapping="Wrap" VerticalAlignment="Center" Height="21" Width="112" Grid.Column="3" Margin="10,0,0,0"/>
+
+        <ComboBox x:Name="depNatural" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Width="124">
+            <TextBlock Text="Обычный"/>
+            <TextBlock Text="VIP"/>
+        </ComboBox>
+        <ComboBox x:Name="depLegal" Grid.Column="4" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Width="131" Height="22">
+            <TextBlock Text="Обычный"/>
+            <TextBlock Text="VIP"/>
+        </ComboBox>
+
         <Button x:Name="button" 
                 Content="Добавить" Grid.Column="1" HorizontalAlignment="Center"
                 Command="{Binding AddCommand}"
@@ -56,8 +82,11 @@
                 <MultiBinding Converter="{StaticResource SimpleMultiConverter}" Mode="OneWay">
                     <Binding ElementName="firstnameBox" Path="Text"/>
                     <Binding ElementName="lastnameBox" Path="Text"/>
-                    <Binding ElementName="datebitchBox" Path="Text"/>
-                    <Binding ElementName="departBox" Path="Text"/>
+                    <Binding ElementName="boxBirthday" Path="Text"/>
+                    <Binding ElementName="depNatural" Path="Text"/>
+                    <Binding ElementName="boxName" Path="Text"/>
+                    <Binding ElementName="boxDateCreate" Path="Text"/>
+                    <Binding ElementName="depLegal" Path="Text"/>
                 </MultiBinding>
             </Button.CommandParameter>
         </Button>
