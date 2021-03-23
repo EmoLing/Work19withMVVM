@@ -1,4 +1,4 @@
-﻿using InterfasesLib;
+﻿using InterfacesLib;
 
 namespace BankSystem
 {

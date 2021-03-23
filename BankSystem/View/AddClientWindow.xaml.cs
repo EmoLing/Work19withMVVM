@@ -20,6 +20,7 @@ namespace BankSystem
     {
         public AddClientWindow(AddClientViewModel addClientViewModel)
         {
+            
             InitializeComponent();
             DataContext = addClientViewModel;
         }

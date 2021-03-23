@@ -25,7 +25,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="C:\Users\temch\Documents\SkillBox\дз18\HomeWork18\BankSystem\InterfasesLib\InterfasesLib.csproj" />
+    <Reference Include="InterfacesLib">
+      <HintPath>InterfacesLib.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="InterfacesLib.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="InterfacesLib.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

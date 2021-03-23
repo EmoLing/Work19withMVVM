@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
-using System.Windows.Documents;
+using System.Windows.Controls;
+using System.Windows.Media;
 using BankSystem.Model;
-using Microsoft.VisualBasic;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -14,7 +14,8 @@ namespace BankSystem.ViewModel
     {
         private Bank bank;
         private string date;
-
+        private string createDate;
+        private bool stateButton;
         public string Date
         {
             get
@@ -27,25 +28,102 @@ namespace BankSystem.ViewModel
                 RaisePropertyChanged("Date");
             }
         }
+        public string DateCreate
+        {
+            get
+            {
+                return createDate;
+            }
+            set
+            {
+                date = value;
+                RaisePropertyChanged("DateCreate");
+            }
+        }
+        public bool StateButton
+        {
+            get
+            {
+                return stateButton;
+            }
+            set
+            {
+                stateButton = value;
+                RaisePropertyChanged("StateButton");
+            }
+        }
 
         public AddClientViewModel(Bank bank)
         {
             this.bank = bank;
             AddCommand = new DelegateCommand<object[]>((i) => AddClientCommand(i));
-            TextIsDateCommand = new DelegateCommand<string>(text=>
+            TextIsDateCommand = new DelegateCommand<object>(box=>
             {
-                Date = text;
-                if (!TextIsDate(text))
+                if ((box as TextBox).Name == "boxBirthday")
+                    Date = (box as TextBox).Text;
+                else
+                    DateCreate = (box as TextBox).Text;
+
+                if (!TextIsDate((box as TextBox).Text.ToString()))
                 {
                     MessageBox.Show("ОШИБКА");
                     Date = string.Empty;
+                    if ((box as TextBox).Name == "boxBirthday")
+                        Date = string.Empty;
+                    else
+                        DateCreate = string.Empty;
+
+                    StateButton = false;
+                    (box as TextBox).Background = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+        }
+                else
+                {
+                    StateButton = true;
+                    (box as TextBox).Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                 }
                 
+            });
+
+            BlockChechCommand = new DelegateCommand<Object[]>(s =>
+            {
+                foreach (var item in s)
+                {
+                    if (item is TextBox)
+                    {
+                        (item as TextBox).IsEnabled = false;
+                        (item as TextBox).Text = string.Empty;
+                    }
+                    else if (item is ComboBox)
+                    {
+                        (item as ComboBox).IsEnabled = false;
+                        (item as ComboBox).Text = string.Empty;
+                    }
+                }
+            });
+            UnBlockChechCommand = new DelegateCommand<Object[]>(s =>
+            {
+                foreach (var item in s)
+                {
+                    if (item is TextBox)
+                    {
+                        (item as TextBox).IsEnabled = true;
+                    }
+                    else if (item is ComboBox)
+                    {
+                        (item as ComboBox).IsEnabled = true;
+                    }
+                }
             });
         }
 
         public DelegateCommand<object[]> AddCommand { get; }
-        public DelegateCommand<string>TextIsDateCommand { get; set; }
+        public DelegateCommand<object>TextIsDateCommand { get; set; }
+        public DelegateCommand<Object[]> BlockChechCommand { get; set; }
+        public DelegateCommand<Object[]> UnBlockChechCommand { get; set; }
+
+
+
+
         private void AddClientCommand(object[] temp)
         {
             if (temp == null)
