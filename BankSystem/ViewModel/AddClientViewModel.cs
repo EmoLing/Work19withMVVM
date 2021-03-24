@@ -122,8 +122,6 @@ namespace BankSystem.ViewModel
         public DelegateCommand<Object[]> UnBlockChechCommand { get; set; }
 
 
-
-
         private void AddClientCommand(object[] temp)
         {
             if (temp == null)
@@ -155,6 +153,7 @@ namespace BankSystem.ViewModel
             if (!string.IsNullOrEmpty(naturOrLegal) && !string.IsNullOrEmpty(simpleOrVip) )
             {
                 bank.AddClient(list, naturOrLegal, simpleOrVip);
+                MessageBox.Show("Добавлено!");
             }
         }
 

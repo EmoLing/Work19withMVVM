@@ -26,18 +26,8 @@
 
   <ItemGroup>
     <Reference Include="InterfacesLib">
-      <HintPath>InterfacesLib.dll</HintPath>
-      <Private>true</Private>
+      <HintPath>..\..\InterfacesLib\bin\Debug\InterfacesLib.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="InterfacesLib.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="InterfacesLib.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
