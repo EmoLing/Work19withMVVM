@@ -24,7 +24,7 @@ namespace BankSystem
         {
             
         }
-        public AllNaturalClient(string firstName, string lastName, DateTime dateOfBirth, string reputation, string department, int accountNumber)
+        public AllNaturalClient(string firstName, string lastName, DateTime dateOfBirth, string department)
         {
             Id = ClientsFunc.GetId(nameof(AllNaturalClient));
             FirstName = firstName;
@@ -32,8 +32,8 @@ namespace BankSystem
             DateOfBirth = dateOfBirth;
             Reputation = ClientsFunc.GetReputatuion();
             Department = department;
-            AccountNumber = accountNumber;
-            AmountOfMoney = ClientsFunc.GetAccountNumber(nameof(AllNaturalClient)); 
+            AccountNumber = ClientsFunc.GetAccountNumber(nameof(AllNaturalClient));
+            AmountOfMoney = 0;
             CheckContribution = 0;
             CheckDebt = 0;
         }

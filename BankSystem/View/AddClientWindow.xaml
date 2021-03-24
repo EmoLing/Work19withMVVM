@@ -29,7 +29,7 @@
             <RowDefinition Height="35*"/>
             <RowDefinition Height="196*"/>
         </Grid.RowDefinitions>
-        <RadioButton  x:Name="radioButton"
+        <RadioButton  x:Name="radioNatur"
                      GroupName="NaturalOrLegal" Content="Физ лицо" Grid.Column="2" 
                      HorizontalAlignment="Left" VerticalAlignment="Center" Height="15" Width="88" Margin="4,0,0,0">
             <i:Interaction.Triggers>
@@ -49,17 +49,17 @@
                     <i:InvokeCommandAction Command="{Binding UnBlockChechCommand, Mode=TwoWay }">
                         <i:InvokeCommandAction.CommandParameter>
                             <MultiBinding Converter="{StaticResource SimpleMultiConverter}" Mode="TwoWay">
-                                    <Binding ElementName="firstnameBox"/>
-                                    <Binding ElementName="lastnameBox"/>
-                                    <Binding ElementName="boxBirthday"/>
-                                    <Binding ElementName="depNatural"/>
-                                </MultiBinding>
+                                <Binding ElementName="firstnameBox"/>
+                                <Binding ElementName="lastnameBox"/>
+                                <Binding ElementName="boxBirthday"/>
+                                <Binding ElementName="depNatural"/>
+                            </MultiBinding>
                         </i:InvokeCommandAction.CommandParameter>
                     </i:InvokeCommandAction>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </RadioButton>
-        <RadioButton x:Name="radioButton1" GroupName="NaturalOrLegal" Content="Юр лицо" Grid.Column="2" HorizontalAlignment="Left" Margin="4,0,0,0" Grid.Row="1" VerticalAlignment="Center" Height="14" Width="69">
+        <RadioButton x:Name="radioLegal" GroupName="NaturalOrLegal" Content="Юр лицо" Grid.Column="2" HorizontalAlignment="Left" Margin="4,0,0,0" Grid.Row="1" VerticalAlignment="Center" Height="14" Width="69">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Checked">
                     <i:InvokeCommandAction Command="{Binding BlockChechCommand, Mode=TwoWay }">
@@ -87,17 +87,17 @@
         </RadioButton>
 
         <TextBox x:Name="firstnameBox"  HorizontalAlignment="Center" Grid.Row="2" 
-                  TextWrapping="Wrap" VerticalAlignment="Center" Width="124" Grid.Column="1" Height="21"/>
+                  TextWrapping="Wrap" VerticalAlignment="Center" Width="124" Grid.Column="1" Height="21" IsEnabled="False"/>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Center" Grid.Row="2" Text="Имя" TextWrapping="Wrap" VerticalAlignment="Center" Height="21" Width="112"/>
 
         <TextBox x:Name="lastnameBox"
                  HorizontalAlignment="Center" Grid.Row="3" TextWrapping="Wrap" 
-                 VerticalAlignment="Center" Width="124" Grid.Column="1" Height="21"/>
+                 VerticalAlignment="Center" Width="124" Grid.Column="1" Height="21" IsEnabled="False"/>
         <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Center" Grid.Row="3" Text="Фамилия" TextWrapping="Wrap" VerticalAlignment="Center" Height="21" Width="112"/>
 
         <TextBox x:Name="boxBirthday" Text="{Binding Date, Mode=TwoWay}" 
                  HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" 
-                 VerticalAlignment="Center" Width="124" Grid.Column="1" Height="21">
+                 VerticalAlignment="Center" Width="124" Grid.Column="1" Height="21" IsEnabled="False">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="LostFocus">
                     <i:InvokeCommandAction Command="{Binding TextIsDateCommand, Mode=TwoWay }" CommandParameter="{Binding ElementName=boxBirthday}" />
@@ -110,11 +110,11 @@
         <TextBlock HorizontalAlignment="Left" Grid.Row="2" Text="Название" TextWrapping="Wrap" VerticalAlignment="Center" Height="21" Width="112" Grid.Column="3" Margin="10,0,0,0"/>
         <TextBox x:Name="boxName" Grid.Column="4" 
                  HorizontalAlignment="Center" Grid.Row="2" 
-                 TextWrapping="Wrap" VerticalAlignment="Center" Width="131" Height="21"/>
+                 TextWrapping="Wrap" VerticalAlignment="Center" Width="131" Height="21" IsEnabled="False"/>
 
         <TextBox x:Name="boxDateCreate" Text="{Binding DateCreate, Mode=TwoWay}" 
                  HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" 
-                 VerticalAlignment="Center" Width="131" Grid.Column="4" Height="21">
+                 VerticalAlignment="Center" Width="131" Grid.Column="4" Height="21" IsEnabled="False">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="LostFocus">
                     <i:InvokeCommandAction Command="{Binding TextIsDateCommand, Mode=TwoWay }" CommandParameter="{Binding ElementName=boxDateCreate}" />
@@ -125,11 +125,11 @@
         <TextBlock  HorizontalAlignment="Left" Grid.Row="4" Text="Дата создания" TextWrapping="Wrap" VerticalAlignment="Center" Height="21" Width="112" Grid.Column="3" Margin="10,0,0,0"/>
         <TextBlock  HorizontalAlignment="Left" Grid.Row="5" Text="Отдел" TextWrapping="Wrap" VerticalAlignment="Center" Height="21" Width="112" Grid.Column="3" Margin="10,0,0,0"/>
 
-        <ComboBox x:Name="depNatural" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Width="124">
+        <ComboBox x:Name="depNatural" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Width="124" IsEnabled="False">
             <TextBlock Text="Обычный"/>
             <TextBlock Text="VIP"/>
         </ComboBox>
-        <ComboBox x:Name="depLegal" Grid.Column="4" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Width="131" Height="22">
+        <ComboBox x:Name="depLegal" Grid.Column="4" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Width="131" Height="22" IsEnabled="False">
             <TextBlock Text="Обычный"/>
             <TextBlock Text="VIP"/>
         </ComboBox>
@@ -148,6 +148,8 @@
                     <Binding ElementName="boxName" Path="Text"/>
                     <Binding ElementName="boxDateCreate" Path="Text"/>
                     <Binding ElementName="depLegal" Path="Text"/>
+                    <Binding ElementName="radioLegal"/>
+                    <Binding ElementName="radioNatur"/>
                 </MultiBinding>
             </Button.CommandParameter>
         </Button>

@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -83,9 +85,32 @@ namespace BankSystem.Model
             }
         }
 
-        public void AddClient<T>(T item)
+        public void AddClient<T>(List<T> item, string depart, string type)
         {
-            
+            List<string> itemTemp = new List<string>();
+
+            foreach (var temp in item)
+            {
+                itemTemp.Add(temp.ToString());
+            }
+
+            if (type == "Обычный" && depart == "Физ лицо")
+            {
+                allNaturalClients.Add(new AllNaturalClient(itemTemp[0],itemTemp[1],DateTime.Parse(itemTemp[2]), "Физический"));
+                clientsDbContext.SaveChanges();
+            }
+            else if (type == "Обычный" && depart == "Юр лицо")
+            {
+
+            }
+            else if (type == "VIP" && depart == "Физ лицо")
+            {
+
+            }
+            else if (type == "VIP" && depart == "Юр лицо")
+            {
+
+            }
             if (item is AllNaturalClient)
             {
                 if (allNaturalClients.Contains(item as AllNaturalClient))

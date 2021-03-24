@@ -90,12 +90,12 @@ namespace BankSystem.ViewModel
                 {
                     if (item is TextBox)
                     {
-                        (item as TextBox).IsEnabled = false;
+                        (item as TextBox).IsEnabled = true;
                         (item as TextBox).Text = string.Empty;
                     }
                     else if (item is ComboBox)
                     {
-                        (item as ComboBox).IsEnabled = false;
+                        (item as ComboBox).IsEnabled = true;
                         (item as ComboBox).Text = string.Empty;
                     }
                 }
@@ -106,11 +106,11 @@ namespace BankSystem.ViewModel
                 {
                     if (item is TextBox)
                     {
-                        (item as TextBox).IsEnabled = true;
+                        (item as TextBox).IsEnabled = false;
                     }
                     else if (item is ComboBox)
                     {
-                        (item as ComboBox).IsEnabled = true;
+                        (item as ComboBox).IsEnabled = false;
                     }
                 }
             });
@@ -129,13 +129,32 @@ namespace BankSystem.ViewModel
             if (temp == null)
                 return;
 
+            string naturOrLegal = string.Empty;
+            string simpleOrVip = string.Empty;
+
+            foreach (var item in temp)
+            {
+                naturOrLegal = (item is RadioButton)
+                    ? (((item as RadioButton).IsChecked == true) ? (item as RadioButton).Content.ToString() : (item as RadioButton).Content.ToString())
+                    : string.Empty;
+
+                if (item.ToString() == "Обычный")
+                    simpleOrVip = "Обычный";
+                else if (item.ToString() == "VIP")
+                    simpleOrVip = "VIP";
+            }
             List<object> list = new List<object>();
             foreach (var item in temp)
             {
-                if (!string.IsNullOrEmpty(item.ToString()))
+                if (!string.IsNullOrEmpty(item.ToString()) && !(item is RadioButton))
                 {
                     list.Add(item);
                 }
+            }
+
+            if (!string.IsNullOrEmpty(naturOrLegal) && !string.IsNullOrEmpty(simpleOrVip) )
+            {
+                bank.AddClient(list, naturOrLegal, simpleOrVip);
             }
         }
 
