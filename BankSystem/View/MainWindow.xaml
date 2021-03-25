@@ -41,7 +41,10 @@
                 HorizontalAlignment="Left" Margin="119,10,0,0" VerticalAlignment="Top"/>
         <Button x:Name="butAdd" Content="Добавить" HorizontalAlignment="Left" Margin="177,10,0,0" VerticalAlignment="Top" Width="58"
                 Command="{Binding AddCommand }"/>
-        <Button x:Name="butTransact" Content="Button" HorizontalAlignment="Left" Margin="257,10,0,0" VerticalAlignment="Top" Command="{Binding TransactCommand}" CommandParameter="{Binding SelectedBank}"/>
-
+        <Button x:Name="butTransact" Content="Транзакции" HorizontalAlignment="Left"
+                Margin="257,10,0,0" VerticalAlignment="Top" Command="{Binding TransactCommand}" CommandParameter="{Binding SelectedBank}"/>
+        <Button x:Name="butOpenContribution" Command="{Binding OpenContibutionCommand}" CommandParameter="{Binding SelectedBank}" Content="Открытие вклада" 
+                HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="112"/>
+        <Button x:Name="butCloseContribution" Content="Закрытие вклада" HorizontalAlignment="Left" Margin="487,10,0,0" VerticalAlignment="Top" Width="84"/>
     </Grid>
 </Window>

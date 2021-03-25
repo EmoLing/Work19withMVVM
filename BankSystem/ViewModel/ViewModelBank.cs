@@ -61,6 +61,26 @@ namespace BankSystem.ViewModel
                 }
 
             });
+
+            OpenContibutionCommand = new DelegateCommand<object>(s =>
+            {
+                if (s == null)
+                {
+                    MessageBox.Show("ВЫБЕРИТЕ КЛИЕНТА!!!!");
+                }
+                else
+                {
+                    ViewModelContibution viewModel = new ViewModelContibution(ref bank, s);
+                    ContributionWindow contibutionWindow = new ContributionWindow(viewModel);
+
+                    if (contibutionWindow.ShowDialog() == true)
+                    {
+                        contibutionWindow.Show();
+                        contibutionWindow.Activate();
+                    }
+                    SaveChages();
+                }
+            });
         }
 
 
@@ -73,6 +93,7 @@ namespace BankSystem.ViewModel
         public DelegateCommand<object> RemoveCommand { get; }
         public DelegateCommand EditCommand { get; }
         public DelegateCommand<object> TransactCommand { get; }
+        public DelegateCommand<object> OpenContibutionCommand { get; }
 
         public ReadOnlyObservableCollection<AllLegalClient> AllLegalClients => bank.AllLegalClients;
         public ReadOnlyObservableCollection<AllNaturalClient> AllNaturalClients => bank.AllNaturalClients;

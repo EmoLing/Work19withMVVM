@@ -3,10 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:BankSystem.View"
+        xmlns:bankSystem="clr-namespace:BankSystem"
         mc:Ignorable="d"
 Title="WindownContribution" Height="250" Width="350" ResizeMode="NoResize">
     <Grid>
+        <Grid.Resources>
+            <bankSystem:SimpleMultiConverter x:Key="SimpleMultiConverter"/>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="101*"/>
             <ColumnDefinition Width="74*"/>
@@ -16,10 +21,33 @@ Title="WindownContribution" Height="250" Width="350" ResizeMode="NoResize">
             <RowDefinition Height="7*"/>
         </Grid.RowDefinitions>
         <Label Content="Сумма вклада" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Width="96" Margin="10,29,0,0" Grid.RowSpan="2"/>
-        <TextBox x:Name="BoxSum" Grid.Column="1" HorizontalAlignment="Center"  TextWrapping="Wrap" VerticalAlignment="Top" Width="128" Height="28" Margin="0,29,0,0" Grid.RowSpan="2"/>
-        <Label x:Name="LabelSum" Content="0" HorizontalAlignment="Left" Margin="10,95,0,0" Grid.Row="1" VerticalAlignment="Top" Width="96" Height="26"/>
-        <Button x:Name="ButSeeSum"  Content="Показать" HorizontalAlignment="Left" Margin="10,70,0,0" Grid.Row="1" VerticalAlignment="Top" Width="57" Height="20"/>
-        <Button x:Name="ButAddCapit"  Content="Оформить вклад" HorizontalAlignment="Left" Margin="10,126,0,0" Grid.Row="1" VerticalAlignment="Top" Height="22" Width="96"/>
+        <TextBox x:Name="BoxSum" Grid.Column="1" HorizontalAlignment="Center"  TextWrapping="Wrap" VerticalAlignment="Top" Width="128" Height="28" Margin="0,29,0,0" Grid.RowSpan="2">
+            </TextBox>
+        <Label x:Name="LabelSum" Content="{Binding TestContribution, Mode=OneWay}"  HorizontalAlignment="Left"
+               Margin="10,95,0,0" Grid.Row="1" VerticalAlignment="Top" Width="96" Height="26"/>
+
+        <Button x:Name="ButSeeSum" Command="{Binding TestContributionCommand}"  Content="Показать" HorizontalAlignment="Left" Margin="10,70,0,0" Grid.Row="1" VerticalAlignment="Top" Width="57" Height="20">
+            <Button.CommandParameter>
+                <MultiBinding Converter="{StaticResource SimpleMultiConverter}" Mode="OneWay">
+                    <Binding ElementName="BoxSum" Path="Text"/>
+                    <Binding ElementName="BoxCountMonth" Path="Text"/>
+                    <Binding ElementName="RadioWith" />
+                    <Binding ElementName="RadioWithout"/>
+                </MultiBinding>
+            </Button.CommandParameter>
+        </Button>
+
+        <Button x:Name="ButAddCapit"  Content="Оформить вклад" Command="{Binding OpenContributionCommand}" HorizontalAlignment="Left" 
+                Margin="10,126,0,0" Grid.Row="1" VerticalAlignment="Top" Height="22" Width="96">
+            <Button.CommandParameter>
+                <MultiBinding Converter="{StaticResource SimpleMultiConverter}" Mode="OneWay">
+                    <Binding ElementName="BoxSum" Path="Text"/>
+                    <Binding ElementName="BoxCountMonth" Path="Text"/>
+                    <Binding ElementName="RadioWith" />
+                    <Binding ElementName="RadioWithout"/>
+                </MultiBinding>
+            </Button.CommandParameter>
+        </Button>
         <Button x:Name="ButCancel" Content="Отмена" HorizontalAlignment="Left" Margin="117,126,0,0" Grid.Row="1" VerticalAlignment="Top" Height="22" Width="75" IsCancel="True"/>
         <Label Content="Количество месяцев (пример)" HorizontalAlignment="Center" Margin="0,37,0,0" Grid.Row="1" VerticalAlignment="Top" Width="182" Height="28"/>
         <TextBox x:Name="BoxCountMonth" Grid.Column="1" HorizontalAlignment="Center" Margin="0,37,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="128" Height="28"/>

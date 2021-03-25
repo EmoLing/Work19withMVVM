@@ -9,16 +9,49 @@ namespace BankSystem
 {
     public partial class AllNaturalClient : NaturalClient
     {
-        private decimal checkContribution;
+        private int id;
+        private string firstName;
+        private string lastName;
+        private DateTime dateOfBirth;
+        private string reputation;
+        private string department;
+        private int accountNumber;
         private decimal amountOfMoney;
+        private decimal checkContribution;
+        public decimal checkDebt;
 
         public override int Id { get; set; }
         public override string FirstName { get; set; }
         public override string LastName { get; set; }
         public override DateTime DateOfBirth { get; set; }
         public string Reputation { get; set; }
-        public override string Department { get; set; }
-        public override int AccountNumber { get; set; }
+
+        public override string Department
+        {
+            get
+            {
+                return department;
+            }
+            set
+            {
+                department = value;
+                RaisePropertyChanged("Department");
+            }
+        }
+
+        public override int AccountNumber
+        {
+            get
+            {
+                return accountNumber;
+            }
+            set
+            {
+                accountNumber = value;
+                RaisePropertyChanged("AccountNumber");
+            }
+        }
+
         public override decimal AmountOfMoney
         {
             get { return amountOfMoney; }
@@ -38,7 +71,19 @@ namespace BankSystem
             }
 
         }
-        public override decimal CheckDebt { get; set; }
+
+        public override decimal CheckDebt
+        {
+            get
+            {
+                return checkDebt;
+            }
+            set
+            {
+                checkDebt = value;
+                RaisePropertyChanged("CheckDebt");
+            }
+        }
 
         public AllNaturalClient()
         {

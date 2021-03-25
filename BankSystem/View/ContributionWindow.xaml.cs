@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BankSystem.ViewModel;
 
 namespace BankSystem.View
 {
@@ -17,9 +18,10 @@ namespace BankSystem.View
     /// </summary>
     public partial class ContributionWindow : Window
     {
-        public ContributionWindow()
+        public ContributionWindow(ViewModelContibution viewModelContibution)
         {
             InitializeComponent();
+            DataContext = viewModelContibution;
         }
     }
 }
