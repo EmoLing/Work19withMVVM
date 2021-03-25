@@ -8,15 +8,125 @@ namespace BankSystem
 {
     public partial class AllLegalClient : LegalClient
     {
-        public override int Id { get; set; }
-        public override string Name { get; set; }
-        public override DateTime DateOfBirth { get; set; }
-        public string Reputation { get; set; }
-        public override string Department { get; set; }
-        public override int AccountNumber { get; set; }
-        public override decimal AmountOfMoney { get; set; }
-        public override decimal CheckContribution { get; set; }
-        public override decimal CheckDebt { get; set; }
+        private int id;
+        private string name;
+        private DateTime dateOfBirth;
+        private string reputation;
+        private string department;
+        private int accountNumber;
+        private decimal amountOfMoney;
+        private decimal checkContribution;
+        public decimal checkDebt;
+
+        public override int Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+                RaisePropertyChanged("Id");
+            }
+        }
+
+        public override string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+                RaisePropertyChanged("Name");
+            }
+        }
+
+        public override DateTime DateOfBirth
+        {
+            get
+            {
+                return dateOfBirth;
+            }
+            set
+            {
+                dateOfBirth = value;
+                RaisePropertyChanged("DateOfBirth");
+            }
+        }
+
+        public string Reputation
+        {
+            get
+            {
+                return reputation;
+            }
+            set
+            {
+                reputation = value;
+                RaisePropertyChanged("Reputation");
+            }
+        }
+        public override string Department
+        {
+            get
+            {
+                return department;
+            }
+            set
+            {
+                department = value;
+                RaisePropertyChanged("Department");
+            }
+        }
+
+        public override int AccountNumber
+        {
+            get
+            {
+                return accountNumber;
+            }
+            set
+            {
+                accountNumber = value;
+                RaisePropertyChanged("AccountNumber");
+            }
+        }
+
+        public override decimal AmountOfMoney
+        {
+            get { return amountOfMoney; }
+            set
+            {
+                amountOfMoney = value;
+                RaisePropertyChanged("AmountOfMoney");
+            }
+        }
+        public override decimal CheckContribution
+        {
+            get { return checkContribution; }
+            set
+            {
+                checkContribution = value;
+                RaisePropertyChanged("CheckContribution");
+            }
+
+        }
+
+        public override decimal CheckDebt
+        {
+            get
+            {
+                return checkDebt;
+            }
+            set
+            {
+                checkDebt = value;
+                RaisePropertyChanged("CheckDebt");
+            }
+        }
 
         public AllLegalClient()
         {

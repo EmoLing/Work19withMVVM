@@ -11,26 +11,70 @@
         <TabControl x:Name="tabControl" Margin="56,47,0,0">
             <TabItem Header="физ. отдел">
                 <Grid>
-                    <DataGrid  ItemsSource="{Binding AllNaturalClients}" SelectedItem="{Binding SelectedBank}" >
+                    <DataGrid  ItemsSource="{Binding AllNaturalClients}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedBank}" >
                         <DataGrid.Columns>
-                            <DataGridTextColumn  Binding="{Binding AmountOfMoney}"/>
+                            <DataGridTextColumn  Binding="{Binding Id}" Header="ID"/>
+                            <DataGridTextColumn  Binding="{Binding FirstName}" Header="Имя"/>
+                            <DataGridTextColumn  Binding="{Binding LastName}" Header="Фамилия"/>
+                            <DataGridTextColumn  Binding="{Binding DateOfBirth}" Header="Дата рождения"/>
+                            <DataGridTextColumn  Binding="{Binding Reputation}" Header="Репутация"/>
+                            <DataGridTextColumn  Binding="{Binding Department}" Header="Отдел"/>
+                            <DataGridTextColumn  Binding="{Binding AccountNumber}" Header="Номер счета"/>
+                            <DataGridTextColumn  Binding="{Binding AmountOfMoney}" Header="Количество денег"/>
+                            <DataGridTextColumn  Binding="{Binding CheckContribution}" Header="Вклад"/>
+                            <DataGridTextColumn  Binding="{Binding CheckDebt}" Header="Кредит"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="юр. отдел">
                 <Grid>
-                    <DataGrid  ItemsSource="{Binding AllLegalClients}" SelectedItem="{Binding SelectedBank}"/>
+                    <DataGrid  ItemsSource="{Binding AllLegalClients}" SelectedItem="{Binding SelectedBank}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn  Binding="{Binding Id}" Header="ID"/>
+                            <DataGridTextColumn  Binding="{Binding Name}" Header="Название"/>
+                            <DataGridTextColumn  Binding="{Binding DateOfBirth}" Header="Дата создания"/>
+                            <DataGridTextColumn  Binding="{Binding Reputation}" Header="Репутация"/>
+                            <DataGridTextColumn  Binding="{Binding Department}" Header="Отдел"/>
+                            <DataGridTextColumn  Binding="{Binding AccountNumber}" Header="Номер счета"/>
+                            <DataGridTextColumn  Binding="{Binding AmountOfMoney}" Header="Количество денег"/>
+                            <DataGridTextColumn  Binding="{Binding CheckContribution}" Header="Вклад"/>
+                            <DataGridTextColumn  Binding="{Binding CheckDebt}" Header="Кредит"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="VIP юр">
                 <Grid>
-                    <DataGrid ItemsSource="{Binding AllVipLegalClients}" SelectedItem="{Binding SelectedBank}"/>
+                    <DataGrid ItemsSource="{Binding AllVipLegalClients}" SelectedItem="{Binding SelectedBank}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn  Binding="{Binding Id}" Header="ID"/>
+                            <DataGridTextColumn  Binding="{Binding Name}" Header="Название"/>
+                            <DataGridTextColumn  Binding="{Binding DateOfBirth}" Header="Дата создания"/>
+                            <DataGridTextColumn  Binding="{Binding Department}" Header="Отдел"/>
+                            <DataGridTextColumn  Binding="{Binding AccountNumber}" Header="Номер счета"/>
+                            <DataGridTextColumn  Binding="{Binding AmountOfMoney}" Header="Количество денег"/>
+                            <DataGridTextColumn  Binding="{Binding CheckContribution}" Header="Вклад"/>
+                            <DataGridTextColumn  Binding="{Binding CheckDebt}" Header="Кредит"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="VIP физ">
                 <Grid>
-                    <DataGrid ItemsSource="{Binding AllVipNaturalClients}" SelectedItem="{Binding SelectedBank}"/>
+                    <DataGrid ItemsSource="{Binding AllVipNaturalClients}" SelectedItem="{Binding SelectedBank}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn  Binding="{Binding Id}" Header="ID"/>
+                            <DataGridTextColumn  Binding="{Binding FirstName}" Header="Имя"/>
+                            <DataGridTextColumn  Binding="{Binding LastName}" Header="Фамилия"/>
+                            <DataGridTextColumn  Binding="{Binding DateOfBirth}" Header="Дата рождения"/>
+                            <DataGridTextColumn  Binding="{Binding Department}" Header="Отдел"/>
+                            <DataGridTextColumn  Binding="{Binding AccountNumber}" Header="Номер счета"/>
+                            <DataGridTextColumn  Binding="{Binding AmountOfMoney}" Header="Количество денег"/>
+                            <DataGridTextColumn  Binding="{Binding CheckContribution}" Header="Вклад"/>
+                            <DataGridTextColumn  Binding="{Binding CheckDebt}" Header="Кредит"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
         </TabControl>
@@ -46,5 +90,6 @@
         <Button x:Name="butOpenContribution" Command="{Binding OpenContibutionCommand}" CommandParameter="{Binding SelectedBank}" Content="Открытие вклада" 
                 HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="112"/>
         <Button x:Name="butCloseContribution" Content="Закрытие вклада" HorizontalAlignment="Left" Margin="487,10,0,0" VerticalAlignment="Top" Width="84"/>
+        <Button x:Name="button" Command="{Binding OpenCreditCommand}" CommandParameter="{Binding SelectedBank }" Content="Button" HorizontalAlignment="Left" Margin="639,20,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

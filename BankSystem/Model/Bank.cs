@@ -409,7 +409,7 @@ namespace BankSystem.Model
                 name = (client as AllVipNaturalClient).FirstName + " " + (client as AllVipNaturalClient).LastName;
             else if (client is AllVipLegalClient)
                 name = (client as AllVipLegalClient).Name;
-
+            clientsDbContext.SaveChanges();
             Notify?.Invoke(this, new AccountEventArgs($"{DateTime.Now}  Закрытие вклада: Клиент {name} из отдела {client.Department} закрыл вклад"));
         }
 
@@ -594,11 +594,11 @@ namespace BankSystem.Model
             }
             else if (Department == "VIP физ")
             {
-                return clientsDbContext.AllLegalClients.Where(s => s.AccountNumber == AccountNumber).FirstOrDefault();
+                return clientsDbContext.AllVipNaturalClients.Where(s => s.AccountNumber == AccountNumber).FirstOrDefault();
             }
             else if (Department == "VIP юр")
             {
-                return clientsDbContext.AllLegalClients.Where(s => s.AccountNumber == AccountNumber).FirstOrDefault();
+                return clientsDbContext.AllVipLegalClients.Where(s => s.AccountNumber == AccountNumber).FirstOrDefault();
             }
             else
                 return null;

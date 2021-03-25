@@ -20,11 +20,70 @@ namespace BankSystem
         private decimal checkContribution;
         public decimal checkDebt;
 
-        public override int Id { get; set; }
-        public override string FirstName { get; set; }
-        public override string LastName { get; set; }
-        public override DateTime DateOfBirth { get; set; }
-        public string Reputation { get; set; }
+        public override int Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+                RaisePropertyChanged("Id");
+            }
+        }
+
+        public override string FirstName
+        {
+            get
+            {
+                return firstName;
+            }
+            set
+            {
+                firstName = value;
+                RaisePropertyChanged("FirstName");
+            }
+        }
+
+        public override string LastName
+        {
+            get
+            {
+                return lastName;
+            }
+            set
+            {
+                lastName = value;
+                RaisePropertyChanged("LastName");
+            }
+        }
+
+        public override DateTime DateOfBirth
+        {
+            get
+            {
+                return dateOfBirth;
+            }
+            set
+            {
+                dateOfBirth = value;
+                RaisePropertyChanged("DateOfBirth");
+            }
+        }
+
+        public string Reputation
+        {
+            get
+            {
+                return reputation;
+            }
+            set
+            {
+                reputation = value;
+                RaisePropertyChanged("Reputation");
+            }
+        }
 
         public override string Department
         {
