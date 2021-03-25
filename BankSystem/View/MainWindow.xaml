@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:BankSystem"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -10,7 +11,11 @@
         <TabControl x:Name="tabControl" Margin="56,47,0,0">
             <TabItem Header="физ. отдел">
                 <Grid>
-                    <DataGrid  ItemsSource="{Binding AllNaturalClients}" SelectedItem="{Binding SelectedBank}"/>
+                    <DataGrid  ItemsSource="{Binding AllNaturalClients}" SelectedItem="{Binding SelectedBank}" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding AmountOfMoney}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="юр. отдел">
@@ -36,6 +41,7 @@
                 HorizontalAlignment="Left" Margin="119,10,0,0" VerticalAlignment="Top"/>
         <Button x:Name="butAdd" Content="Добавить" HorizontalAlignment="Left" Margin="177,10,0,0" VerticalAlignment="Top" Width="58"
                 Command="{Binding AddCommand }"/>
+        <Button x:Name="butTransact" Content="Button" HorizontalAlignment="Left" Margin="257,10,0,0" VerticalAlignment="Top" Command="{Binding TransactCommand}" CommandParameter="{Binding SelectedBank}"/>
 
     </Grid>
 </Window>

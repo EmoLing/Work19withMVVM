@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankSystem", "BankSystem\BankSystem.csproj", "{B3A27551-5B5E-46E3-B7B5-22EB150817FA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfasesLib", "InterfasesLib\InterfasesLib.csproj", "{61428249-0755-4FDB-B70E-C985749252D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B3A27551-5B5E-46E3-B7B5-22EB150817FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3A27551-5B5E-46E3-B7B5-22EB150817FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3A27551-5B5E-46E3-B7B5-22EB150817FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61428249-0755-4FDB-B70E-C985749252D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61428249-0755-4FDB-B70E-C985749252D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61428249-0755-4FDB-B70E-C985749252D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61428249-0755-4FDB-B70E-C985749252D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

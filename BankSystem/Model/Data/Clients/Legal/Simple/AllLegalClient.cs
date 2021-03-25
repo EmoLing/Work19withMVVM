@@ -15,8 +15,8 @@ namespace BankSystem
         public override string Department { get; set; }
         public override int AccountNumber { get; set; }
         public override decimal AmountOfMoney { get; set; }
-        public decimal CheckContribution { get; set; }
-        public decimal CheckDebt { get; set; }
+        public override decimal CheckContribution { get; set; }
+        public override decimal CheckDebt { get; set; }
 
         public AllLegalClient()
         {

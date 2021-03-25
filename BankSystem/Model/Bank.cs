@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using InterfacesLib;
+using System.Windows;
+using InterfasesLib;
 using Microsoft.EntityFrameworkCore;
 using Prism.Mvvm;
 
 namespace BankSystem.Model
 {
-    public class Bank : BindableBase, IAdd, IRemove, ICredit, ITransact, IContribution
+    public class Bank : BindableBase, IAdd, IRemove, ICredit, ITransact, IContribution, IFind
     {
         public ClientsDBContext clientsDbContext = new ClientsDBContext();
 
@@ -127,20 +129,49 @@ namespace BankSystem.Model
         /// <param name="client1">Отправитель</param>
         /// <param name="client2">Получатель</param>
         /// <param name="sum">сумма</param>
-        public void Transact<TClient1>(TClient1 client1, TClient1 client2, decimal sum)
+        public string Transact<TClient1>(TClient1 client1, TClient1 client2, decimal sum)
             where TClient1 : IAccount
 
         {
             if (client1 == null || client2 == null)
-                return;
+                return "Выберите в главном окне от кого будет перевод и пвоторите попытку!";
             if (client1.Equals(client2))
-            {
-                return;
-            }
+                return "Нельзя перевести самому себе!";
 
-            if (!LockTransact(client1, client2, sum)) return;
+            string message = "Перевод в другой отдел возможен только при суммах меньше 50000";
+            if (!LockTransact(client1, client2, sum))
+                return message;
+
             GiveMoney(client1, client2, sum);
             GetMoney(client2, client1, sum);
+
+            clientsDbContext.SaveChanges();
+            return "Успешно!";
+        }
+
+        private void ChangeEdit<T>(T client)
+            where T : IAccount
+        {
+            if (client is AllNaturalClient)
+            {
+                var tempClient = allNaturalClients.Where(s => (client as AllNaturalClient).Id == s.Id).FirstOrDefault();
+                allNaturalClients[allNaturalClients.IndexOf(tempClient)] = client as AllNaturalClient;
+            }
+            else if (client is AllLegalClient)
+            {
+                var tempClient = allLegalClients.Where(s => (client as AllLegalClient).Id == s.Id).FirstOrDefault();
+                allLegalClients[allLegalClients.IndexOf(tempClient)] = client as AllLegalClient;
+            }
+            else if (client is AllVipNaturalClient)
+            {
+                var tempClient = allVipNatural.Where(s => (client as AllVipNaturalClient).Id == s.Id).FirstOrDefault();
+                allVipNatural[allVipNatural.IndexOf(tempClient)] = client as AllVipNaturalClient;
+            }
+            else if (client is AllVipLegalClient)
+            {
+                var tempClient = allVipLegal.Where(s => (client as AllVipLegalClient).Id == s.Id).FirstOrDefault();
+                allVipLegal[allVipLegal.IndexOf(tempClient)] = client as AllVipLegalClient;
+            }
         }
 
         /// <summary>
@@ -267,23 +298,28 @@ namespace BankSystem.Model
         /// <param name="oldDateTime">Дата создания вклада</param>
         /// <param name="sum">Сумма</param>
         /// <returns></returns>
-        public void Contribution(bool Capitalization, DateTime currentDateTime, DateTime oldDateTime, decimal sum)
+        public void Contribution<T>(bool Capitalization, DateTime currentDateTime, DateTime oldDateTime, decimal sum, T client)
+        where T : IAccount
         {
             var a = currentDateTime.Subtract(oldDateTime).Days / (365.25 / 12);
             int month = Convert.ToInt32(a);
 
-            Check_Contribution = sum;
-            AmountOfMoney -= sum;
+            client.CheckContribution = sum;
+            client.AmountOfMoney -= sum;
 
-            if (AmountOfMoney < 0)
+            if (client.AmountOfMoney < 0)
             {
-                AmountOfMoney += sum;
-                Check_Contribution = 0;
+                client.AmountOfMoney += sum;
+                client.CheckContribution = 0;
                 return;
             }
 
-            int stavka = 10;
-            stavka = (reputation == "Положительная") ? 20 : 10;
+            int stavka = 24;
+
+            stavka = (client is AllNaturalClient)
+                ? ((client as AllNaturalClient).Reputation == "Положительная" ? 20 : 10)
+                : ((client is AllLegalClient) ? (((client as AllLegalClient).Reputation == "Положительная") ? 20 : 10) : 24);
+
 
             if (Capitalization)
             {
@@ -291,17 +327,28 @@ namespace BankSystem.Model
                 decimal percent_stavka = percent;
                 for (int i = 0; i < month; i++)
                 {
-                    Check_Contribution += percent_stavka;
-                    percent_stavka = (Check_Contribution * ((decimal)stavka / 100)) / 12;
+                    client.CheckContribution += percent_stavka;
+                    percent_stavka = (client.CheckContribution * ((decimal)stavka / 100)) / 12;
                 }
             }
             else
             {
                 if (month == 12)
-                    Check_Contribution += stavka;
+                    client.CheckContribution += stavka;
             }
 
-            Notify?.Invoke(this, new AccountEventArgs($"{DateTime.Now}  Открытие вклада: Клиент {this.Name} из отдела {this.Department} открыл вклад и положил на него сумму {sum} рублей"));
+            string name = string.Empty;
+
+            if (client is AllNaturalClient)
+                name = (client as AllNaturalClient).FirstName + " " + (client as AllNaturalClient).LastName;
+            else if (client is AllLegalClient)
+                name = (client as AllLegalClient).Name;
+            else if (client is AllVipNaturalClient)
+                name = (client as AllVipNaturalClient).FirstName + " " + (client as AllVipNaturalClient).LastName;
+            else if (client is AllVipLegalClient)
+                name = (client as AllVipLegalClient).Name;
+
+            Notify?.Invoke(this, new AccountEventArgs($"{DateTime.Now}  Открытие вклада: Клиент {name} из отдела {client.Department} открыл вклад и положил на него сумму {sum} рублей"));
         }
 
         /// <summary>
@@ -312,13 +359,17 @@ namespace BankSystem.Model
         /// <param name="oldDateTime">Дата создания вклада</param>
         /// <param name="sum">Сумма</param>
         /// <returns></returns>
-        public string Test_Contribution(bool Capitalization, DateTime currentDateTime, DateTime oldDateTime, decimal sum)
+        public string Test_Contribution<T>(bool Capitalization, DateTime currentDateTime, DateTime oldDateTime, decimal sum, T client)
+        where T : IAccount
         {
             var a = currentDateTime.Subtract(oldDateTime).Days / (365.25 / 12);
             int month = Convert.ToInt32(a);
 
-            int stavka = 12;
-            stavka = (reputation == "Положительная") ? 15 : 12;
+            int stavka = 24;
+
+            stavka = (client is AllNaturalClient)
+                ? ((client as AllNaturalClient).Reputation == "Положительная" ? 20 : 10)
+                : ((client is AllLegalClient) ? (((client as AllLegalClient).Reputation == "Положительная") ? 20 : 10) : 24);
 
             decimal testCheck_Contribution = sum;
             if (Capitalization)
@@ -342,11 +393,24 @@ namespace BankSystem.Model
         /// <summary>
         /// Закрытие вклада
         /// </summary>
-        public void CloseContribution()
+        public void CloseContribution<T>(T client)
+        where T : IAccount
         {
-            AmountOfMoney += Check_Contribution;
-            Check_Contribution = 0;
-            Notify?.Invoke(this, new AccountEventArgs($"{DateTime.Now}  Закрытие вклада: Клиент {this.Name} из отдела {this.Department} закрыл вклад"));
+            client.AmountOfMoney += client.CheckContribution;
+            client.CheckContribution = 0;
+
+            string name = string.Empty;
+
+            if (client is AllNaturalClient)
+                name = (client as AllNaturalClient).FirstName + " " + (client as AllNaturalClient).LastName;
+            else if (client is AllLegalClient)
+                name = (client as AllLegalClient).Name;
+            else if (client is AllVipNaturalClient)
+                name = (client as AllVipNaturalClient).FirstName + " " + (client as AllVipNaturalClient).LastName;
+            else if (client is AllVipLegalClient)
+                name = (client as AllVipLegalClient).Name;
+
+            Notify?.Invoke(this, new AccountEventArgs($"{DateTime.Now}  Закрытие вклада: Клиент {name} из отдела {client.Department} закрыл вклад"));
         }
 
         /// <summary>
@@ -355,14 +419,28 @@ namespace BankSystem.Model
         /// <param name="sum_credit"></param>
         /// <param name="count_month"></param>
         /// <param name="current_moth"></param>
-        public void Credit(decimal sum_credit, int count_month, DateTime oldDate, DateTime currentDate)
+        public void Credit<T>(decimal sum_credit, int count_month, DateTime oldDate, DateTime currentDate, T client)
+        where T : IAccount
         {
+            if (client is AllNaturalClient)
+            {
+                if (GetAge((client as AllNaturalClient).DateOfBirth) < 18)
+                    throw new AgeExceptions("Нельзя выдавать кредит несовершеннолетним");
+                else if (GetAge((client as AllVipNaturalClient).DateOfBirth) < 18)
+                    throw new AgeExceptions("Нельзя выдавать кредит несовершеннолетним");
+            }
+
+            string reputation = (client is AllNaturalClient)
+                ? (client as AllNaturalClient).Reputation
+                : ((client is AllLegalClient) ? (client as AllLegalClient).Reputation : string.Empty);
 
             var current_moth = currentDate.Subtract(oldDate).Days / (365.25 / 12);
-            decimal credit_stavka = (reputation == "Положительная") ? (decimal)0.03 : (decimal)0.1;
+            decimal credit_stavka = (client is AllNaturalClient || client is AllLegalClient) ? ((reputation == "Положительная") ? (decimal)0.03 : (decimal)0.1) : (decimal)0.01;
             decimal first_sum = (reputation == "Положительная") ? (sum_credit / 100 * 5) : (sum_credit / 100 * 10); //Первоначальный взнос
+            if (client is AllVipNaturalClient || client is AllVipLegalClient)
+                first_sum = 0;
             sum_credit -= first_sum; //Сумма кредита
-            AmountOfMoney += sum_credit;
+            client.AmountOfMoney += sum_credit;
 
             decimal every_month_debt = sum_credit / count_month; //ежемесячный долг
 
@@ -370,29 +448,49 @@ namespace BankSystem.Model
 
             decimal Ostatok_Po_Credit = sum_credit - every_month_debt; //Остаток по кредиту
 
-            Check_Debt = Ostatok_Po_Credit;
+            client.CheckDebt = Ostatok_Po_Credit;
             for (int i = 2; i <= current_moth; i++)
             {
                 Nachis_Percents = Ostatok_Po_Credit * credit_stavka / 12; //на второй месяц
 
                 decimal Sum_Platezha = every_month_debt + Nachis_Percents; //Сумма платежа
 
-                AmountOfMoney -= Sum_Platezha;
+                client.AmountOfMoney -= Sum_Platezha;
 
                 Ostatok_Po_Credit -= every_month_debt;
 
-                Check_Debt = Ostatok_Po_Credit;
+                client.CheckDebt = Ostatok_Po_Credit;
             }
-            Notify?.Invoke(this, new AccountEventArgs($"{DateTime.Now}  Получение кредита: Клиент {this.Name} из отдела {this.Department} взял кредит на сумму {sum_credit} рублей на {count_month} месяцев"));
+
+            string name = string.Empty;
+
+            if (client is AllNaturalClient)
+                name = (client as AllNaturalClient).FirstName + " " + (client as AllNaturalClient).LastName;
+            else if (client is AllLegalClient)
+                name = (client as AllLegalClient).Name;
+            else if (client is AllVipNaturalClient)
+                name = (client as AllVipNaturalClient).FirstName + " " + (client as AllVipNaturalClient).LastName;
+            else if (client is AllVipLegalClient)
+                name = (client as AllVipLegalClient).Name;
+
+            Notify?.Invoke(this, new AccountEventArgs($"{DateTime.Now}  Получение кредита: Клиент {name} из отдела {client.Department} взял кредит на сумму {sum_credit} рублей на {count_month} месяцев"));
         }
 
-        public string TestCredit(decimal sum_credit, int count_month, DateTime oldDate, DateTime currentDate, out string OstatokPoCredit, out string firstSum)
+        public string TestCredit<T>(decimal sum_credit, int count_month, DateTime oldDate, DateTime currentDate, out string OstatokPoCredit, out string firstSum, T client)
+        where T : IAccount
         {
             var current_moth = currentDate.Subtract(oldDate).Days / (365.25 / 12);
             string NextSummPlatezha = string.Empty;
 
-            decimal credit_stavka = (reputation == "Положительная") ? (decimal)0.03 : (decimal)0.08;
+            string reputation = (client is AllNaturalClient)
+                ? (client as AllNaturalClient).Reputation
+                : ((client is AllLegalClient) ? (client as AllLegalClient).Reputation : string.Empty);
+
+            decimal credit_stavka = (client is AllNaturalClient || client is AllLegalClient) ? ((reputation == "Положительная") ? (decimal)0.03 : (decimal)0.1) : (decimal)0.01;
             decimal first_sum = (reputation == "Положительная") ? (sum_credit / 100 * 5) : (sum_credit / 100 * 10); //Первоначальный взнос
+            if (client is AllVipNaturalClient || client is AllVipLegalClient)
+                first_sum = 0; //Первоначальный взнос
+
             firstSum = $"{first_sum,0:0.##}";
 
             sum_credit -= first_sum; //Сумма кредита
@@ -423,11 +521,110 @@ namespace BankSystem.Model
             return NextSummPlatezha;
         }
 
-        public void CloseCredit()
+        public void CloseCredit<T>(T client)
+        where T : IAccount
         {
-            AmountOfMoney -= Check_Debt;
-            Check_Debt = 0;
-            Notify?.Invoke(this, new AccountEventArgs($"{DateTime.Now}  Закрытие кредита: Клиент {this.Name} из отдела {this.Department} закрыл кредит"));
+            client.AmountOfMoney -= client.CheckDebt;
+            client.CheckDebt = 0;
+
+            string name = string.Empty;
+
+            if (client is AllNaturalClient)
+                name = (client as AllNaturalClient).FirstName + " " + (client as AllNaturalClient).LastName;
+            else if (client is AllLegalClient)
+                name = (client as AllLegalClient).Name;
+            else if (client is AllVipNaturalClient)
+                name = (client as AllVipNaturalClient).FirstName + " " + (client as AllVipNaturalClient).LastName;
+            else if (client is AllVipLegalClient)
+                name = (client as AllVipLegalClient).Name;
+
+            Notify?.Invoke(this, new AccountEventArgs($"{DateTime.Now}  Закрытие кредита: Клиент {name} из отдела {client.Department} закрыл кредит"));
+        }
+
+        /// <summary>
+        /// Получить возраст
+        /// </summary>
+        /// <param name="DateOfCreate">Дата создания/рождения</param>
+        /// <returns></returns>
+        private int GetAge(DateTime DateOfCreate)
+        {
+            DateTime dateTime = DateTime.Now;
+            int year = dateTime.Year - DateOfCreate.Year;
+            if (dateTime.Month < DateOfCreate.Month || (dateTime.Month == DateOfCreate.Month
+                                                        && dateTime.Day < DateOfCreate.Day))
+                year--;
+            return year;
+        }
+
+        public object Find<T>(string FirstName, string LastName, string Department)
+        {
+            if (Department == "Физический")
+            {
+                return clientsDbContext.AllNaturalClients.Where(s => s.FirstName == FirstName && s.LastName == LastName);
+            }
+            else if (Department == "VIP физ")
+            {
+                return clientsDbContext.AllVipNaturalClients.Where(s => s.FirstName == FirstName && s.LastName == LastName);
+            }
+            return 0;
+        }
+
+        public object Find<T>(string Name, string Department)
+        {
+            if (Department == "Юридический")
+            {
+                return clientsDbContext.AllLegalClients.Where(s => s.Name == Name);
+            }
+            else if (Department == "VIP юр")
+            {
+                return clientsDbContext.AllVipLegalClients.Where(s => s.Name == Name);
+            }
+            return 0;
+        }
+
+        public object Find<T>(int AccountNumber, string Department)
+        {
+            if (Department == "Физический")
+            {
+                return clientsDbContext.AllNaturalClients.Where(s => s.AccountNumber == AccountNumber).FirstOrDefault();
+            }
+            else if (Department == "Юридический")
+            {
+                return clientsDbContext.AllLegalClients.Where(s => s.AccountNumber == AccountNumber);
+            }
+            else if (Department == "VIP физ")
+            {
+                return clientsDbContext.AllLegalClients.Where(s => s.AccountNumber == AccountNumber);
+            }
+            else if (Department == "VIP юр")
+            {
+                return clientsDbContext.AllLegalClients.Where(s => s.AccountNumber == AccountNumber);
+            }
+            else
+                return null;
+        }
+
+        /// <summary>
+        /// Обработчкик события
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public static void SaveToLogMessage(object sender, AccountEventArgs e)
+        {
+            string path = $"logs/{DateTime.Now.ToShortDateString()}_log_transacts.txt";
+            DirectoryInfo directoryInfo = new DirectoryInfo("logs");
+            if (directoryInfo.Exists == false)
+                Directory.CreateDirectory("logs");
+            using (StreamWriter streamWriter = new StreamWriter(path, true))
+            {
+                streamWriter.AutoFlush = true;
+                streamWriter.WriteLine(e.Message);
+                streamWriter.WriteLine($"Сумма транзакции: {e.Sum} рублей");
+            }
+            FileInfo fileInfo = new FileInfo(path);
+            MessageBox.Show($"Транзакция была записана в log расположенный по пути: \n {fileInfo.FullName}",
+                "Complete!", MessageBoxButton.OK, MessageBoxImage.Information);
+
         }
     }
 }

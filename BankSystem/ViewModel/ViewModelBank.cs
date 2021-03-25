@@ -1,8 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using BankSystem.Model;
+using BankSystem.View;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -38,6 +40,27 @@ namespace BankSystem.ViewModel
                 AddClientWindow addClientWindow = new AddClientWindow(addClientViewModel);
                 addClientWindow.Show();
             });
+
+            TransactCommand = new DelegateCommand<object>(i =>
+            {
+                if (i == null)
+                {
+                    MessageBox.Show("ВЫБЕРИТЕ КЛИЕНТА!!!!");
+                }
+                else
+                {
+                    TransactViewModel viewModel = new TransactViewModel(ref bank, i);
+                    TransactWindow transactWindow = new TransactWindow(viewModel);
+
+                    if (transactWindow.ShowDialog() == true)
+                    {
+                        transactWindow.Show();
+                        transactWindow.Activate();
+                    }
+                    SaveChages();
+                }
+
+            });
         }
 
 
@@ -45,9 +68,11 @@ namespace BankSystem.ViewModel
         {
             bank.clientsDbContext.SaveChanges();
         }
+
         public DelegateCommand AddCommand { get; }
         public DelegateCommand<object> RemoveCommand { get; }
         public DelegateCommand EditCommand { get; }
+        public DelegateCommand<object> TransactCommand { get; }
 
         public ReadOnlyObservableCollection<AllLegalClient> AllLegalClients => bank.AllLegalClients;
         public ReadOnlyObservableCollection<AllNaturalClient> AllNaturalClients => bank.AllNaturalClients;

@@ -19,44 +19,58 @@ namespace BankSystem
         {
             ClientsDBContext context = new ClientsDBContext();
             int iD = 0;
-            if (typeClient == "AllNaturalClient")
+            try
             {
-                iD=context.AllNaturalClients.OrderByDescending(id => id).FirstOrDefault().Id;
+                if (typeClient == "AllNaturalClient")
+                {
+                    iD = context.AllNaturalClients.OrderByDescending(id => id).FirstOrDefault().Id;
+                }
+                else if (typeClient == "AllLegalClient")
+                {
+                    iD = context.AllLegalClients.OrderByDescending(id => id).FirstOrDefault().Id;
+                }
+                else if (typeClient == "AllVipNaturalClient")
+                {
+                    iD = context.AllVipNaturalClients.OrderByDescending(id => id).FirstOrDefault().Id;
+                }
+                else if (typeClient == "AllVipLegalClients")
+                {
+                    iD = context.AllVipLegalClients.OrderByDescending(id => id).FirstOrDefault().Id;
+                }
             }
-            else if(typeClient == "AllLegalClient")
+            catch (NullReferenceException ex)
             {
-                iD = context.AllLegalClients.OrderByDescending(id => id).FirstOrDefault().Id;
+                iD = 0;
             }
-            else if (typeClient == "AllVipNaturalClient")
-            {
-                iD = context.AllVipNaturalClients.OrderByDescending(id => id).FirstOrDefault().Id;
-            }
-            else if (typeClient == "AllVipLegalClients")
-            {
-                iD = context.AllVipLegalClients.OrderByDescending(id => id).FirstOrDefault().Id;
-            }
-            return iD+1;
+            return ++iD;
         }
 
         public static int GetAccountNumber(string typeClient)
         {
             ClientsDBContext context = new ClientsDBContext();
-            int accountNumber = 0;
-            if (typeClient == "AllNaturalClient")
+            int accountNumber = 1000;
+            try
             {
-                accountNumber = context.AllNaturalClients.OrderByDescending(s => s).FirstOrDefault().AccountNumber;
+                if (typeClient == "AllNaturalClient")
+                {
+                    accountNumber = context.AllNaturalClients.OrderByDescending(s => s).FirstOrDefault().AccountNumber;
+                }
+                else if (typeClient == "AllLegalClient")
+                {
+                    accountNumber = context.AllLegalClients.OrderByDescending(s => s).FirstOrDefault().AccountNumber;
+                }
+                else if (typeClient == "AllVipNaturalClient")
+                {
+                    accountNumber = context.AllVipNaturalClients.OrderByDescending(s => s).FirstOrDefault().AccountNumber;
+                }
+                else if (typeClient == "AllVipLegalClients")
+                {
+                    accountNumber = context.AllVipLegalClients.OrderByDescending(s => s).FirstOrDefault().AccountNumber;
+                }
             }
-            else if (typeClient == "AllLegalClient")
+            catch (NullReferenceException)
             {
-                accountNumber = context.AllLegalClients.OrderByDescending(s => s).FirstOrDefault().AccountNumber;
-            }
-            else if (typeClient == "AllVipNaturalClient")
-            {
-                accountNumber = context.AllVipNaturalClients.OrderByDescending(s => s).FirstOrDefault().AccountNumber;
-            }
-            else if (typeClient == "AllVipLegalClients")
-            {
-                accountNumber = context.AllVipLegalClients.OrderByDescending(s => s).FirstOrDefault().AccountNumber;
+                accountNumber = 1000;
             }
             return accountNumber + 1;
         }

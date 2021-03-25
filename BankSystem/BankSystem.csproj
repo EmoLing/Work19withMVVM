@@ -25,9 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="InterfacesLib">
-      <HintPath>..\..\InterfacesLib\bin\Debug\InterfacesLib.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\InterfasesLib\InterfasesLib.csproj" />
   </ItemGroup>
 
 </Project>
