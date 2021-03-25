@@ -13,7 +13,7 @@
                 <Grid>
                     <DataGrid  ItemsSource="{Binding AllNaturalClients}" SelectedItem="{Binding SelectedBank}" >
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding AmountOfMoney}"/>
+                            <DataGridTextColumn  Binding="{Binding AmountOfMoney}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

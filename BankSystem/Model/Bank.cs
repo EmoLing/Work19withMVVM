@@ -590,15 +590,15 @@ namespace BankSystem.Model
             }
             else if (Department == "Юридический")
             {
-                return clientsDbContext.AllLegalClients.Where(s => s.AccountNumber == AccountNumber);
+                return clientsDbContext.AllLegalClients.Where(s => s.AccountNumber == AccountNumber).FirstOrDefault();
             }
             else if (Department == "VIP физ")
             {
-                return clientsDbContext.AllLegalClients.Where(s => s.AccountNumber == AccountNumber);
+                return clientsDbContext.AllLegalClients.Where(s => s.AccountNumber == AccountNumber).FirstOrDefault();
             }
             else if (Department == "VIP юр")
             {
-                return clientsDbContext.AllLegalClients.Where(s => s.AccountNumber == AccountNumber);
+                return clientsDbContext.AllLegalClients.Where(s => s.AccountNumber == AccountNumber).FirstOrDefault();
             }
             else
                 return null;
