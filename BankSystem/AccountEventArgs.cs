@@ -1,5 +1,8 @@
 ﻿namespace BankSystem
 {
+    /// <summary>
+    /// Класс для эвента
+    /// </summary>
     public class AccountEventArgs
     {
         public string Message { get; }

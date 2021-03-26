@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-
+using Newtonsoft.Json;
+using System.IO;
 #nullable disable
 
 namespace BankSystem
@@ -26,8 +28,19 @@ namespace BankSystem
         {
             if (!optionsBuilder.IsConfigured)
             {
+                var settings = new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All
+                };
+                string json = File.ReadAllText($"../../../Connect/stringConnect.json");
+                string stringConnection = string.Empty;
+                if (!string.IsNullOrEmpty(json))
+                {
+                    stringConnection = JsonConvert.DeserializeObject<string>(json, settings);
+                }
+
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ClientsDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+                optionsBuilder.UseSqlServer($@"{stringConnection}");
             }
         }
 

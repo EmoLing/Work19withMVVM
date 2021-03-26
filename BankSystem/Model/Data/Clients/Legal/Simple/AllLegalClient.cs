@@ -8,16 +8,51 @@ namespace BankSystem
 {
     public partial class AllLegalClient : LegalClient
     {
-        private int id;
-        private string name;
-        private DateTime dateOfBirth;
-        private string reputation;
-        private string department;
-        private int accountNumber;
-        private decimal amountOfMoney;
-        private decimal checkContribution;
-        public decimal checkDebt;
+        #region Поля
 
+        /// <summary>
+        /// Id
+        /// </summary>
+        private int id;
+        /// <summary>
+        /// Название
+        /// </summary>
+        private string name;
+        /// <summary>
+        /// Дата создания
+        /// </summary>
+        private DateTime dateOfBirth;
+        /// <summary>
+        /// Репутация
+        /// </summary>
+        private string reputation;
+        /// <summary>
+        /// Отдел
+        /// </summary>
+        private string department;
+        /// <summary>
+        /// Номер счета
+        /// </summary>
+        private int accountNumber;
+        /// <summary>
+        /// Количество денег на счету
+        /// </summary>
+        private decimal amountOfMoney;
+        /// <summary>
+        /// Вклад
+        /// </summary>
+        private decimal checkContribution;
+        /// <summary>
+        /// Кредит
+        /// </summary>
+        public decimal checkDebt;
+        #endregion
+
+        #region Свойства
+
+        /// <summary>
+        /// Id
+        /// </summary>
         public override int Id
         {
             get
@@ -30,7 +65,9 @@ namespace BankSystem
                 RaisePropertyChanged("Id");
             }
         }
-
+        /// <summary>
+        /// Название
+        /// </summary>
         public override string Name
         {
             get
@@ -43,7 +80,9 @@ namespace BankSystem
                 RaisePropertyChanged("Name");
             }
         }
-
+        /// <summary>
+        /// Дата создания
+        /// </summary>
         public override DateTime DateOfBirth
         {
             get
@@ -56,7 +95,9 @@ namespace BankSystem
                 RaisePropertyChanged("DateOfBirth");
             }
         }
-
+        /// <summary>
+        /// Репутация
+        /// </summary>
         public string Reputation
         {
             get
@@ -69,6 +110,9 @@ namespace BankSystem
                 RaisePropertyChanged("Reputation");
             }
         }
+        /// <summary>
+        /// Отдел
+        /// </summary>
         public override string Department
         {
             get
@@ -81,7 +125,9 @@ namespace BankSystem
                 RaisePropertyChanged("Department");
             }
         }
-
+        /// <summary>
+        /// Номер счета
+        /// </summary>
         public override int AccountNumber
         {
             get
@@ -94,7 +140,9 @@ namespace BankSystem
                 RaisePropertyChanged("AccountNumber");
             }
         }
-
+        /// <summary>
+        /// Количество денег на счете
+        /// </summary>
         public override decimal AmountOfMoney
         {
             get { return amountOfMoney; }
@@ -104,6 +152,9 @@ namespace BankSystem
                 RaisePropertyChanged("AmountOfMoney");
             }
         }
+        /// <summary>
+        /// Вклад
+        /// </summary>
         public override decimal CheckContribution
         {
             get { return checkContribution; }
@@ -114,7 +165,9 @@ namespace BankSystem
             }
 
         }
-
+        /// <summary>
+        /// Кредит
+        /// </summary>
         public override decimal CheckDebt
         {
             get
@@ -127,10 +180,17 @@ namespace BankSystem
                 RaisePropertyChanged("CheckDebt");
             }
         }
+        #endregion
 
         public AllLegalClient()
         {
         }
+        /// <summary>
+        /// Конструктор добавление клиента
+        /// </summary>
+        /// <param name="name">Название</param>
+        /// <param name="dateOfBirth">Дата создания</param>
+        /// <param name="department">Отдел</param>
         public AllLegalClient(string name, DateTime dateOfBirth, string department)
         {
             Id = ClientsFunc.GetId(nameof(AllLegalClient));

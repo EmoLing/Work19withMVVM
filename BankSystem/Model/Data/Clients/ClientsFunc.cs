@@ -5,6 +5,10 @@ namespace BankSystem
 {
     public static class ClientsFunc
     {
+        /// <summary>
+        /// Получение репутации
+        /// </summary>
+        /// <returns></returns>
         public static string GetReputatuion()
         {
             Random r = new Random();
@@ -15,25 +19,30 @@ namespace BankSystem
             return reputation;
         }
 
+        /// <summary>
+        /// Получение Id
+        /// </summary>
+        /// <param name="typeClient"></param>
+        /// <returns></returns>
         public static int GetId(string typeClient)
         {
             ClientsDBContext context = new ClientsDBContext();
             int iD = 0;
             try
             {
-                if (typeClient == "AllNaturalClient")
+                if ((typeClient == "AllNaturalClient") && (context.AllNaturalClients.Count() != 0))
                 {
                     iD = context.AllNaturalClients.OrderByDescending(id => id).FirstOrDefault().Id;
                 }
-                else if (typeClient == "AllLegalClient")
+                else if ((typeClient == "AllLegalClient") && (context.AllLegalClients.Count() != 0))
                 {
                     iD = context.AllLegalClients.OrderByDescending(id => id).FirstOrDefault().Id;
                 }
-                else if (typeClient == "AllVipNaturalClient")
+                else if ((typeClient == "AllVipNaturalClient") && (context.AllVipNaturalClients.Count() != 0))
                 {
                     iD = context.AllVipNaturalClients.OrderByDescending(id => id).FirstOrDefault().Id;
                 }
-                else if (typeClient == "AllVipLegalClients")
+                else if ((typeClient == "AllVipLegalClients") && (context.AllVipLegalClients.Count() != 0))
                 {
                     iD = context.AllVipLegalClients.OrderByDescending(id => id).FirstOrDefault().Id;
                 }
@@ -45,27 +54,32 @@ namespace BankSystem
             return ++iD;
         }
 
+        /// <summary>
+        /// Получение Номера счета
+        /// </summary>
+        /// <param name="typeClient"></param>
+        /// <returns></returns>
         public static int GetAccountNumber(string typeClient)
         {
             ClientsDBContext context = new ClientsDBContext();
             int accountNumber = 1000;
             try
             {
-                if (typeClient == "AllNaturalClient")
+                if ((typeClient == "AllNaturalClient") && (context.AllNaturalClients.Count() != 0))
                 {
-                    accountNumber = context.AllNaturalClients.OrderByDescending(s => s).FirstOrDefault().AccountNumber;
+                    accountNumber = context.AllNaturalClients.OrderByDescending(accountNumber => accountNumber).FirstOrDefault().AccountNumber;
                 }
-                else if (typeClient == "AllLegalClient")
+                else if ((typeClient == "AllLegalClient") && (context.AllLegalClients.Count() != 0))
                 {
-                    accountNumber = context.AllLegalClients.OrderByDescending(s => s).FirstOrDefault().AccountNumber;
+                    accountNumber = context.AllLegalClients.OrderByDescending(accountNumber => accountNumber).FirstOrDefault().AccountNumber;
                 }
-                else if (typeClient == "AllVipNaturalClient")
+                else if ((typeClient == "AllVipNaturalClient") && (context.AllVipNaturalClients.Count() != 0))
                 {
-                    accountNumber = context.AllVipNaturalClients.OrderByDescending(s => s).FirstOrDefault().AccountNumber;
+                    accountNumber = context.AllVipNaturalClients.OrderByDescending(accountNumber => accountNumber).FirstOrDefault().AccountNumber;
                 }
-                else if (typeClient == "AllVipLegalClients")
+                else if ((typeClient == "AllVipLegalClients") && (context.AllVipLegalClients.Count() != 0))
                 {
-                    accountNumber = context.AllVipLegalClients.OrderByDescending(s => s).FirstOrDefault().AccountNumber;
+                    accountNumber = context.AllVipLegalClients.OrderByDescending(accountNumber => accountNumber).FirstOrDefault().AccountNumber;
                 }
             }
             catch (NullReferenceException)

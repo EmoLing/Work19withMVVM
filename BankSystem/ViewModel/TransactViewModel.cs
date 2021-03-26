@@ -13,6 +13,10 @@ namespace BankSystem.ViewModel
         private Bank bank;
         private string client;
         private object selectedClient;
+
+        /// <summary>
+        /// Получатель
+        /// </summary>
         public string Client
         {
             get { return client; }
@@ -22,6 +26,12 @@ namespace BankSystem.ViewModel
                 RaisePropertyChanged("Client");
             }
         }
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="bank">банк</param>
+        /// <param name="SelectedClient">Выбранный клиент</param>
         public TransactViewModel(ref Bank bank, object SelectedClient)
         {
             this.bank = bank;
@@ -32,13 +42,35 @@ namespace BankSystem.ViewModel
             LoadedCommand = new DelegateCommand(() => this.bank.Notify += Bank.SaveToLogMessage);
             UnLoadedCommand = new DelegateCommand(() => this.bank.Notify -= Bank.SaveToLogMessage);
         }
+
+        #region Команды
+        /// <summary>
+        /// Команда транзакции
+        /// </summary>
         public DelegateCommand<string> TransactCommand { get; set; }
+        /// <summary>
+        /// Поиск клиента
+        /// </summary>
         public DelegateCommand<object[]> FindClientCommand { get; set; }
+        /// <summary>
+        /// Закрытие окна
+        /// </summary>
         public DelegateCommand<Window> CloseCommand { get; }
+        /// <summary>
+        /// Загрузка окна
+        /// </summary>
         public DelegateCommand LoadedCommand { get; }
+        /// <summary>
+        /// Выгрузка окна
+        /// </summary>
         public DelegateCommand UnLoadedCommand { get; }
+        #endregion
 
-
+        #region Методы
+        /// <summary>
+        /// Поиск клиента
+        /// </summary>
+        /// <param name="s"></param>
         private void FildClient(object[] s)
         {
             string accountNumber = s[1].ToString();
@@ -100,5 +132,6 @@ namespace BankSystem.ViewModel
                 }
             }
         }
+        #endregion
     }
 }

@@ -23,5 +23,17 @@ namespace BankSystem.View
             InitializeComponent();
             DataContext = modelCredit;
         }
+        /// <summary>
+        /// Ограничение на ввод только цифр
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BoxSum_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!Char.IsDigit(e.Text, 0))
+            {
+                e.Handled = true;
+            }
+        }
     }
 }

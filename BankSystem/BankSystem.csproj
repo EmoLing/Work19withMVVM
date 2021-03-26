@@ -28,4 +28,10 @@
     <ProjectReference Include="..\InterfasesLib\InterfasesLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Connect\stringConnect.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

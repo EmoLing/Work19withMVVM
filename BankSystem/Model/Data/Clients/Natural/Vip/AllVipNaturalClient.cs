@@ -7,16 +7,49 @@ namespace BankSystem
 {
     public partial class AllVipNaturalClient : NaturalClient
     {
+        #region Поля
+        /// <summary>
+        /// Id
+        /// </summary>
         private int id;
+        /// <summary>
+        /// Имя
+        /// </summary>
         private string firstName;
+        /// <summary>
+        /// Фамилия
+        /// </summary>
         private string lastName;
+        /// <summary>
+        /// Дата рождения
+        /// </summary>
         private DateTime dateOfBirth;
+        /// <summary>
+        /// Отдел
+        /// </summary>
         private string department;
+        /// <summary>
+        /// Номер счета
+        /// </summary>
         private int accountNumber;
+        /// <summary>
+        /// Количество денег на счету
+        /// </summary>
         private decimal amountOfMoney;
+        /// <summary>
+        /// Вклад
+        /// </summary>
         private decimal checkContribution;
+        /// <summary>
+        /// Кредит
+        /// </summary>
         public decimal checkDebt;
+        #endregion
 
+        #region Свойства
+        /// <summary>
+        /// Id
+        /// </summary>
         public override int Id
         {
             get
@@ -29,7 +62,9 @@ namespace BankSystem
                 RaisePropertyChanged("Id");
             }
         }
-
+        /// <summary>
+        /// Имя
+        /// </summary>
         public override string FirstName
         {
             get
@@ -42,7 +77,9 @@ namespace BankSystem
                 RaisePropertyChanged("FirstName");
             }
         }
-
+        /// <summary>
+        /// Фамилия
+        /// </summary>
         public override string LastName
         {
             get
@@ -55,7 +92,9 @@ namespace BankSystem
                 RaisePropertyChanged("LastName");
             }
         }
-
+        /// <summary>
+        /// Дата рождения
+        /// </summary>
         public override DateTime DateOfBirth
         {
             get
@@ -68,7 +107,9 @@ namespace BankSystem
                 RaisePropertyChanged("DateOfBirth");
             }
         }
-
+        /// <summary>
+        /// Отдел
+        /// </summary>
         public override string Department
         {
             get
@@ -81,7 +122,9 @@ namespace BankSystem
                 RaisePropertyChanged("Department");
             }
         }
-
+        /// <summary>
+        /// Номер счета
+        /// </summary>
         public override int AccountNumber
         {
             get
@@ -94,7 +137,9 @@ namespace BankSystem
                 RaisePropertyChanged("AccountNumber");
             }
         }
-
+        /// <summary>
+        /// Количество денег на счете 
+        /// </summary>
         public override decimal AmountOfMoney
         {
             get { return amountOfMoney; }
@@ -104,6 +149,9 @@ namespace BankSystem
                 RaisePropertyChanged("AmountOfMoney");
             }
         }
+        /// <summary>
+        /// Вклад
+        /// </summary>
         public override decimal CheckContribution
         {
             get { return checkContribution; }
@@ -114,7 +162,9 @@ namespace BankSystem
             }
 
         }
-
+        /// <summary>
+        /// Кредит
+        /// </summary>
         public override decimal CheckDebt
         {
             get
@@ -127,12 +177,19 @@ namespace BankSystem
                 RaisePropertyChanged("CheckDebt");
             }
         }
-
+        #endregion
 
         public AllVipNaturalClient()
         {
             
         }
+        /// <summary>
+        /// Конструктор при добавлении клиента
+        /// </summary>
+        /// <param name="firstName">Имя</param>
+        /// <param name="lastName">Фамилия</param>
+        /// <param name="dateOfBirth">Дата рождения</param>
+        /// <param name="department">Отдел</param>
         public AllVipNaturalClient(string firstName, string lastName, DateTime dateOfBirth, string department)
         {
             Id = ClientsFunc.GetId(nameof(AllVipNaturalClient));

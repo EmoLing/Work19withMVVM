@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BankSystem.View"
         xmlns:bankSystem="clr-namespace:BankSystem"
         mc:Ignorable="d"
-        Title="WindowCredit" Height="400" Width="400">
+        Title="WindowCredit" Height="400" Width="400" ResizeMode="NoResize">
     <Grid>
         <Grid.Resources>
             <bankSystem:SimpleMultiConverter x:Key="SimpleMultiConverter"/>
@@ -27,12 +27,12 @@
         </Grid.ColumnDefinitions>
         <Label Content="Сумма" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Height="30" Width="56" Grid.Row="1" Margin="10,0,0,0"/>
         <Label Content="Количество месяцев" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Height="30" Width="200"/>
-        <TextBox x:Name="BoxSum" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="146" Height="30"/>
-        <TextBox x:Name="BoxCountMonth" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="2"  TextWrapping="Wrap" VerticalAlignment="Center" Width="146" Height="30"/>
+        <TextBox x:Name="BoxSum" PreviewTextInput="BoxSum_PreviewTextInput" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="146" Height="30"/>
+        <TextBox x:Name="BoxCountMonth" PreviewTextInput="BoxSum_PreviewTextInput" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="2"  TextWrapping="Wrap" VerticalAlignment="Center" Width="146" Height="30"/>
         <Label Content="Первоначальный взнос" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Height="30" Width="200"/>
         <TextBox x:Name="BoxFirstSum" Text="{Binding BoxFirstSum}" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="146" Height="30" IsEnabled="False"/>
         <Label Content="Ежемесячный платеж" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Grid.Column="1" Height="30" Width="200"/>
-        <TextBox  x:Name="BoxEvermonth" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="4"  TextWrapping="Wrap" VerticalAlignment="Center" Width="146" Height="30" IsEnabled="False"/>
+        <TextBox  x:Name="BoxEvermonth" Text="{Binding BoxEvermonth}" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="4"  TextWrapping="Wrap" VerticalAlignment="Center" Width="146" Height="30" IsEnabled="False"/>
         <Label Content="Сумма долга (если не платить)" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Height="30" Width="200"/>
         <TextBox x:Name="BoxDebt" Text="{Binding BoxDebt}" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="5"  TextWrapping="Wrap" VerticalAlignment="Center" Width="146" Height="30" IsEnabled="False"/>
         <Button x:Name="ButSeeTest" Command="{Binding SeeTestCreditCommand}" Content="Предварительный расчет" Grid.Column="1" HorizontalAlignment="Left"
@@ -48,9 +48,20 @@
                 </MultiBinding>
             </Button.CommandParameter>
         </Button>
-        <Button x:Name="ButCredit" Content="Оформить" Grid.Column="1" HorizontalAlignment="Left" Margin="10,62,0,0" Grid.Row="6" VerticalAlignment="Top" Height="31" Width="70"/>
+        <Button x:Name="ButCredit" Command="{Binding CreditCommand}" Content="Оформить" Grid.Column="1" HorizontalAlignment="Left" Margin="10,62,0,0" Grid.Row="6" VerticalAlignment="Top" Height="31" Width="70">
+            <Button.CommandParameter>
+                <MultiBinding Converter="{StaticResource SimpleMultiConverter}" Mode="OneWay">
+                    <Binding ElementName="BoxSum"/>
+                    <Binding ElementName="BoxCountMonth"/>
+                    <Binding ElementName="BoxFirstSum"/>
+                    <Binding ElementName="BoxEvermonth"/>
+                    <Binding ElementName="BoxDebt"/>
+                    <Binding ElementName="BoxTestTime"/>
+                </MultiBinding>
+            </Button.CommandParameter>
+        </Button>
         <Button x:Name="ButCancel" Content="Отмена" Grid.Column="1" HorizontalAlignment="Left" Margin="99,63,0,0" Grid.Row="6" VerticalAlignment="Top" Height="30" Width="71" IsCancel="True"/>
-        <TextBox x:Name="BoxTestTime" Grid.Column="2" HorizontalAlignment="Left" Margin="102,10,0,0" Grid.Row="6"  TextWrapping="Wrap" VerticalAlignment="Top" Width="53" Height="28"/>
+        <TextBox x:Name="BoxTestTime" PreviewTextInput="BoxSum_PreviewTextInput" Grid.Column="2" HorizontalAlignment="Left" Margin="102,10,0,0" Grid.Row="6"  TextWrapping="Wrap" VerticalAlignment="Top" Width="53" Height="28"/>
         <Label Content="+ к DateNow" Grid.Column="2" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="6" VerticalAlignment="Top" Height="28" Width="87"/>
     </Grid>
 </Window>

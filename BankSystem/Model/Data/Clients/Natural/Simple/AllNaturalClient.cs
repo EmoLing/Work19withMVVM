@@ -9,17 +9,53 @@ namespace BankSystem
 {
     public partial class AllNaturalClient : NaturalClient
     {
+        #region Поля
+        /// <summary>
+        /// Id
+        /// </summary>
         private int id;
+        /// <summary>
+        /// Имя
+        /// </summary>
         private string firstName;
+        /// <summary>
+        /// Фамилия
+        /// </summary>
         private string lastName;
+        /// <summary>
+        /// Дата рождения
+        /// </summary>
         private DateTime dateOfBirth;
+        /// <summary>
+        /// Репутация
+        /// </summary>
         private string reputation;
+        /// <summary>
+        /// Отдел
+        /// </summary>
         private string department;
+        /// <summary>
+        /// Номер счета
+        /// </summary>
         private int accountNumber;
+        /// <summary>
+        /// Количество денег
+        /// </summary>
         private decimal amountOfMoney;
+        /// <summary>
+        /// Вклад
+        /// </summary>
         private decimal checkContribution;
+        /// <summary>
+        /// Кредит
+        /// </summary>
         public decimal checkDebt;
+        #endregion
 
+        #region Свойства
+        /// <summary>
+        /// ID
+        /// </summary>
         public override int Id
         {
             get
@@ -33,6 +69,9 @@ namespace BankSystem
             }
         }
 
+        /// <summary>
+        /// Имя
+        /// </summary>
         public override string FirstName
         {
             get
@@ -46,6 +85,9 @@ namespace BankSystem
             }
         }
 
+        /// <summary>
+        /// Фамилия
+        /// </summary>
         public override string LastName
         {
             get
@@ -59,6 +101,9 @@ namespace BankSystem
             }
         }
 
+        /// <summary>
+        /// Дата рождения
+        /// </summary>
         public override DateTime DateOfBirth
         {
             get
@@ -72,6 +117,9 @@ namespace BankSystem
             }
         }
 
+        /// <summary>
+        /// Репутация
+        /// </summary>
         public string Reputation
         {
             get
@@ -85,6 +133,9 @@ namespace BankSystem
             }
         }
 
+        /// <summary>
+        /// Отдел
+        /// </summary>
         public override string Department
         {
             get
@@ -98,6 +149,9 @@ namespace BankSystem
             }
         }
 
+        /// <summary>
+        /// Номер счета
+        /// </summary>
         public override int AccountNumber
         {
             get
@@ -111,6 +165,9 @@ namespace BankSystem
             }
         }
 
+        /// <summary>
+        /// Количество денег на счету
+        /// </summary>
         public override decimal AmountOfMoney
         {
             get { return amountOfMoney; }
@@ -120,9 +177,13 @@ namespace BankSystem
                 RaisePropertyChanged("AmountOfMoney");
             }
         }
+
+        /// <summary>
+        /// Вклад
+        /// </summary>
         public override decimal CheckContribution
         {
-            get { return checkContribution;}
+            get { return checkContribution; }
             set
             {
                 checkContribution = value;
@@ -131,6 +192,9 @@ namespace BankSystem
 
         }
 
+        /// <summary>
+        /// Кредит
+        /// </summary>
         public override decimal CheckDebt
         {
             get
@@ -143,11 +207,20 @@ namespace BankSystem
                 RaisePropertyChanged("CheckDebt");
             }
         }
+        #endregion
 
         public AllNaturalClient()
         {
-            
+
         }
+
+        /// <summary>
+        /// Конструктор при добавлении клиента
+        /// </summary>
+        /// <param name="firstName">Имя</param>
+        /// <param name="lastName">Фамилия</param>
+        /// <param name="dateOfBirth">Дата рождения</param>
+        /// <param name="department">Отдел</param>
         public AllNaturalClient(string firstName, string lastName, DateTime dateOfBirth, string department)
         {
             Id = ClientsFunc.GetId(nameof(AllNaturalClient));

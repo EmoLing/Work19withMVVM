@@ -5,6 +5,9 @@ using System.Windows.Data;
 
 namespace BankSystem
 {
+    /// <summary>
+    /// Мультиконвертер
+    /// </summary>
     public class SimpleMultiConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)

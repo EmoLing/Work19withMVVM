@@ -12,10 +12,17 @@ namespace BankSystem.ViewModel
 {
     public class AddClientViewModel : BindableBase
     {
+        #region Поля
         private Bank bank;
         private string date;
         private string createDate;
         private bool stateButton;
+        #endregion
+
+        #region Свойства
+        /// <summary>
+        /// дата рождения
+        /// </summary>
         public string Date
         {
             get
@@ -28,6 +35,9 @@ namespace BankSystem.ViewModel
                 RaisePropertyChanged("Date");
             }
         }
+        /// <summary>
+        /// Дата создания
+        /// </summary>
         public string DateCreate
         {
             get
@@ -36,10 +46,13 @@ namespace BankSystem.ViewModel
             }
             set
             {
-                date = value;
+                createDate = value;
                 RaisePropertyChanged("DateCreate");
             }
         }
+        /// <summary>
+        /// Состояние кнопки
+        /// </summary>
         public bool StateButton
         {
             get
@@ -52,76 +65,43 @@ namespace BankSystem.ViewModel
                 RaisePropertyChanged("StateButton");
             }
         }
+        #endregion
 
+        #region Конструктор
         public AddClientViewModel(Bank bank)
         {
             this.bank = bank;
             AddCommand = new DelegateCommand<object[]>((i) => AddClientCommand(i));
-            TextIsDateCommand = new DelegateCommand<object>(box=>
-            {
-                if ((box as TextBox).Name == "boxBirthday")
-                    Date = (box as TextBox).Text;
-                else
-                    DateCreate = (box as TextBox).Text;
-
-                if (!TextIsDate((box as TextBox).Text.ToString()))
-                {
-                    MessageBox.Show("ОШИБКА");
-                    Date = string.Empty;
-                    if ((box as TextBox).Name == "boxBirthday")
-                        Date = string.Empty;
-                    else
-                        DateCreate = string.Empty;
-
-                    StateButton = false;
-                    (box as TextBox).Background = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+            TextIsDateCommand = new DelegateCommand<object>(box => TestDate(box));
+            BlockChechCommand = new DelegateCommand<Object[]>(s => BlockCheck(s));
+            UnBlockChechCommand = new DelegateCommand<Object[]>(s => UnblockCheck(s));
         }
-                else
-                {
-                    StateButton = true;
-                    (box as TextBox).Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-                }
-                
-            });
+        #endregion
 
-            BlockChechCommand = new DelegateCommand<Object[]>(s =>
-            {
-                foreach (var item in s)
-                {
-                    if (item is TextBox)
-                    {
-                        (item as TextBox).IsEnabled = true;
-                        (item as TextBox).Text = string.Empty;
-                    }
-                    else if (item is ComboBox)
-                    {
-                        (item as ComboBox).IsEnabled = true;
-                        (item as ComboBox).Text = string.Empty;
-                    }
-                }
-            });
-            UnBlockChechCommand = new DelegateCommand<Object[]>(s =>
-            {
-                foreach (var item in s)
-                {
-                    if (item is TextBox)
-                    {
-                        (item as TextBox).IsEnabled = false;
-                    }
-                    else if (item is ComboBox)
-                    {
-                        (item as ComboBox).IsEnabled = false;
-                    }
-                }
-            });
-        }
-
+        #region Команды
+        /// <summary>
+        /// Команда добавления
+        /// </summary>
         public DelegateCommand<object[]> AddCommand { get; }
-        public DelegateCommand<object>TextIsDateCommand { get; set; }
+        /// <summary>
+        /// Команда проверки на дату
+        /// </summary>
+        public DelegateCommand<object> TextIsDateCommand { get; set; }
+        /// <summary>
+        /// Команда переключения на Check
+        /// </summary>
         public DelegateCommand<Object[]> BlockChechCommand { get; set; }
+        /// <summary>
+        /// Команда переключения на UnCheck
+        /// </summary>
         public DelegateCommand<Object[]> UnBlockChechCommand { get; set; }
+        #endregion
 
-
+        #region Методы
+        /// <summary>
+        /// Добавление клиента
+        /// </summary>
+        /// <param name="temp">Массив параметров</param>
         private void AddClientCommand(object[] temp)
         {
             if (temp == null)
@@ -130,34 +110,107 @@ namespace BankSystem.ViewModel
             string naturOrLegal = string.Empty;
             string simpleOrVip = string.Empty;
 
+
             foreach (var item in temp)
             {
-                naturOrLegal = (item is RadioButton)
-                    ? (((item as RadioButton).IsChecked == true) ? (item as RadioButton).Content.ToString() : (item as RadioButton).Content.ToString())
-                    : string.Empty;
-
-                if (item.ToString() == "Обычный")
-                    simpleOrVip = "Обычный";
-                else if (item.ToString() == "VIP")
-                    simpleOrVip = "VIP";
+                if (item is RadioButton && (item as RadioButton).IsChecked == true)
+                    naturOrLegal = (item as RadioButton).Content.ToString();
+                if (item.ToString() == "Обычный" || item.ToString() == "VIP")
+                    simpleOrVip = item.ToString();
             }
             List<object> list = new List<object>();
-            foreach (var item in temp)
+            try
             {
-                if (!string.IsNullOrEmpty(item.ToString()) && !(item is RadioButton))
+                foreach (var item in temp)
                 {
-                    list.Add(item);
+                    if (!string.IsNullOrEmpty(item.ToString()) && !(item is RadioButton))
+                    {
+                        list.Add(item);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(naturOrLegal) && !string.IsNullOrEmpty(simpleOrVip))
+                {
+                    bank.AddClient(list, naturOrLegal, simpleOrVip);
+                    MessageBox.Show("Добавлено!");
                 }
             }
-
-            if (!string.IsNullOrEmpty(naturOrLegal) && !string.IsNullOrEmpty(simpleOrVip) )
+            catch (Exception e)
             {
-                bank.AddClient(list, naturOrLegal, simpleOrVip);
-                MessageBox.Show("Добавлено!");
+                MessageBox.Show(e.Message);
+            }
+        }
+        /// <summary>
+        /// Проверка даты 
+        /// </summary>
+        /// <param name="box">TextBox date</param>
+        private void TestDate(object box)
+        {
+            if ((box as TextBox).Name == "boxBirthday")
+                Date = (box as TextBox).Text;
+            else
+                DateCreate = (box as TextBox).Text;
+
+            if (!TextIsDate((box as TextBox).Text.ToString()))
+            {
+                MessageBox.Show("ОШИБКА");
+                Date = string.Empty;
+                if ((box as TextBox).Name == "boxBirthday")
+                    Date = string.Empty;
+                else
+                    DateCreate = string.Empty;
+
+                StateButton = false;
+                (box as TextBox).Background = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+            }
+            else
+            {
+                StateButton = true;
+                (box as TextBox).Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
             }
         }
 
+        /// <summary>
+        /// RadioBut Check
+        /// </summary>
+        /// <param name="s">Массив элементов</param>
+        private void BlockCheck(object[] s)
+        {
+            foreach (var item in s)
+            {
+                if (item is TextBox)
+                {
+                    (item as TextBox).IsEnabled = true;
+                    (item as TextBox).Text = string.Empty;
+                }
+                else if (item is ComboBox)
+                {
+                    (item as ComboBox).IsEnabled = true;
+                    (item as ComboBox).Text = string.Empty;
+                }
+            }
+        }
 
+        /// <summary>
+        /// RadioBut Uncheck
+        /// </summary>
+        /// <param name="s"></param>
+        private void UnblockCheck(object[] s)
+        {
+            foreach (var item in s)
+            {
+                if (item is TextBox)
+                {
+                    (item as TextBox).IsEnabled = false;
+                    (item as TextBox).Text = string.Empty;
+                }
+                else if (item is ComboBox)
+                {
+                    (item as ComboBox).IsEnabled = false;
+                    (item as ComboBox).Text = string.Empty;
+                }
+            }
+        }
         /// <summary>
         /// Проверка на то, чтобы дата была по формату dd.mm.yyyy
         /// </summary>
@@ -175,5 +228,6 @@ namespace BankSystem.ViewModel
             }
             return false;
         }
+        #endregion
     }
 }

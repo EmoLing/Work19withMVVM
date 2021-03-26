@@ -53,6 +53,11 @@ namespace BankSystem.Model
 
         }
 
+        /// <summary>
+        /// Удаление клиента
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item">Выбранный клиент</param>
         public void RemoveValue<T>(T item)
         {
             if (item is AllNaturalClient)
@@ -89,6 +94,13 @@ namespace BankSystem.Model
             }
         }
 
+        /// <summary>
+        /// Добавление клиента
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item">Коллекция итемов</param>
+        /// <param name="depart">Отдел</param>
+        /// <param name="type">Тип клиента</param>
         public void AddClient<T>(List<T> item, string depart, string type)
         {
             List<string> itemTemp = new List<string>();
@@ -105,7 +117,7 @@ namespace BankSystem.Model
             }
             else if (type == "Обычный" && depart == "Юр лицо")
             {
-                allLegalClients.Add(new AllLegalClient(itemTemp[0], DateTime.Parse(itemTemp[2]), "Юридический"));
+                allLegalClients.Add(new AllLegalClient(itemTemp[0], DateTime.Parse(itemTemp[1]), "Юридический"));
                 
             }
             else if (type == "VIP" && depart == "Физ лицо")
@@ -149,6 +161,11 @@ namespace BankSystem.Model
             return "Успешно!";
         }
 
+        /// <summary>
+        /// НЕ ИСПОЛЬЗУЕМЫЙ МЕТОД!
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="client"></param>
         private void ChangeEdit<T>(T client)
             where T : IAccount
         {
@@ -337,6 +354,8 @@ namespace BankSystem.Model
                     client.CheckContribution += stavka;
             }
 
+            client.CheckContribution=Math.Round(client.CheckContribution, 2);
+
             string name = string.Empty;
 
             if (client is AllNaturalClient)
@@ -396,7 +415,7 @@ namespace BankSystem.Model
         public void CloseContribution<T>(T client)
         where T : IAccount
         {
-            client.AmountOfMoney += client.CheckContribution;
+            client.AmountOfMoney += Math.Round(client.CheckContribution,2);
             client.CheckContribution = 0;
 
             string name = string.Empty;
@@ -426,7 +445,11 @@ namespace BankSystem.Model
             {
                 if (GetAge((client as AllNaturalClient).DateOfBirth) < 18)
                     throw new AgeExceptions("Нельзя выдавать кредит несовершеннолетним");
-                else if (GetAge((client as AllVipNaturalClient).DateOfBirth) < 18)
+            }
+
+            if (client is AllVipNaturalClient)
+            {
+                if (GetAge((client as AllVipNaturalClient).DateOfBirth) < 18)
                     throw new AgeExceptions("Нельзя выдавать кредит несовершеннолетним");
             }
 
@@ -461,6 +484,8 @@ namespace BankSystem.Model
 
                 client.CheckDebt = Ostatok_Po_Credit;
             }
+            client.AmountOfMoney = Math.Round(client.AmountOfMoney, 2);
+            client.CheckDebt = Math.Round(client.CheckDebt, 2);
 
             string name = string.Empty;
 
@@ -556,6 +581,14 @@ namespace BankSystem.Model
             return year;
         }
 
+        /// <summary>
+        /// Поиск по имени и фамилии
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="FirstName"></param>
+        /// <param name="LastName"></param>
+        /// <param name="Department"></param>
+        /// <returns></returns>
         public object Find<T>(string FirstName, string LastName, string Department)
         {
             if (Department == "Физический")
@@ -568,7 +601,13 @@ namespace BankSystem.Model
             }
             return 0;
         }
-
+        /// <summary>
+        /// Поиск по Названию
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="Name"></param>
+        /// <param name="Department"></param>
+        /// <returns></returns>
         public object Find<T>(string Name, string Department)
         {
             if (Department == "Юридический")
@@ -582,6 +621,13 @@ namespace BankSystem.Model
             return 0;
         }
 
+        /// <summary>
+        /// Поиск по номеру счета
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="AccountNumber"></param>
+        /// <param name="Department"></param>
+        /// <returns></returns>
         public object Find<T>(int AccountNumber, string Department)
         {
             if (Department == "Физический")
